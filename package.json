@@ -1,0 +1,13 @@
+{
+  "name": "asilo",
+  "version": "1.0.0",
+  "description": "Mappa e lista degli asili nido di Milano",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
