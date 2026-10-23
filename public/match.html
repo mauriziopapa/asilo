@@ -1124,7 +1124,7 @@ function renderCase() {
   /* repopulate filter (preserving selection) */
   syncAsiloSelects();
   const filterVal = document.getElementById('filter-asilo').value;
-  const filtered  = filterVal ? case_.filter(c => c.asilo_vicino === filterVal) : case_;
+  const filtered  = filterVal ? case_.filter(c => asiloList(c).includes(filterVal)) : case_;
 
   if (!filtered.length) {
     el.innerHTML = `<div class="empty">
@@ -1136,7 +1136,7 @@ function renderCase() {
   el.innerHTML = '';
   filtered.forEach(c => {
     const tot = (c.canone||0) + (c.spese||0);
-    const asiloNome = asili.find(a => a.id === c.asilo_vicino)?.nome || c.asilo_vicino || null;
+    const asiloNomi = asiloList(c).map(id => asili.find(a => a.id === id)?.nome || id).filter(Boolean);
     const card = el.appendChild(document.createElement('div'));
     card.className = 'card';
     card.innerHTML = `
@@ -1148,7 +1148,7 @@ function renderCase() {
         ${c.tipo ? `<span class="meta-item">🛏 <b>${x(c.tipo)}</b></span>` : ''}
         ${c.mq  ? `<span class="meta-item">📐 <b>${c.mq} m²</b></span>` : ''}
         ${c.distanza ? `<span class="meta-item">🚶 ${x(c.distanza)} dall'asilo</span>` : ''}
-        ${asiloNome ? `<span class="meta-item">🏫 <b>${x(asiloNome)}</b></span>` : ''}
+        ${asiloNomi.length ? `<span class="meta-item">🏫 <b>${x(asiloNomi.join(' · '))}</b></span>` : ''}
       </div>
       <div class="cost-row">
         <div class="cost-pill">
@@ -1195,7 +1195,7 @@ function renderRecap() {
         : null;
 
       const caseAsilo = case_
-        .filter(c => c.asilo_vicino === a.id)
+        .filter(c => asiloList(c).includes(a.id))
         .map(c => {
           const totCasa = (c.canone||0) + (c.spese||0);
           const totEst  = totCasa + rEst;
@@ -1246,19 +1246,20 @@ function renderRecap() {
 
   /* ── TABELLA FLAT ── */
   if (case_.length && asili.length) {
-    const rows = case_
-      .map(c => {
-        const a = asili.find(aa => aa.id === c.asilo_vicino);
-        if (!a) return null;
+    const rows = [];
+    case_.forEach(c => {
+      asiloList(c).forEach(aId => {
+        const a = asili.find(aa => aa.id === aId);
+        if (!a) return;
         const rEst    = a.retta_estesa || a.retta_standard || 0;
         const totCasa = (c.canone||0) + (c.spese||0);
         const totEst  = totCasa + rEst;
         const totWelfare = welfareAnnuo > 0 ? totCasa : null;
         const mesiCop = (rEst > 0 && welfareAnnuo > 0) ? Math.floor(welfareAnnuo / rEst) : null;
-        return { c, a, rEst, totCasa, totEst, totWelfare, mesiCop };
-      })
-      .filter(Boolean)
-      .sort((p, q) => p.totEst - q.totEst);
+        rows.push({ c, a, rEst, totCasa, totEst, totWelfare, mesiCop });
+      });
+    });
+    rows.sort((p, q) => p.totEst - q.totEst);
 
     const showWelfare = welfareAnnuo > 0;
 
@@ -1314,6 +1315,11 @@ function renderRecap() {
 }
 
 /* ────────────────────────────────────────────── HELPERS */
+function asiloList(c) {
+  const av = c.asilo_vicino;
+  if (!av) return [];
+  return Array.isArray(av) ? av : [av];
+}
 function renderLinks(linkStr) {
   if (!linkStr) return '';
   const urls = linkStr.split('|').map(s => s.trim()).filter(Boolean);
@@ -1380,10 +1386,10 @@ function renderAppuntamenti() {
       <thead><tr><th>Data</th><th>Ora</th><th>Casa</th><th>Asilo di riferimento</th><th>Note</th><th></th></tr></thead>
       <tbody>${appC.map(a => {
         const c = case_.find(i => i.id === a.ref_id);
-        const as = c && asili.find(i => i.id === c.asilo_vicino);
+        const asNomi = c ? asiloList(c).map(id => asili.find(i => i.id === id)?.nome || id) : [];
         return `<tr class="${isPast(a) ? 'past' : ''}">${when(a)}
           <td><div style="font-weight:600">${x(c?.indirizzo || '(non più in elenco)')}</div>${c?.zona ? `<div class="td-asilo-name">${x(c.zona)}</div>` : ''}${c?.link ? `<div style="margin-top:3px">${renderLinks(c.link)}</div>` : ''}</td>
-          <td class="td-asilo-name">${x(as?.nome || '—')}</td>
+          <td class="td-asilo-name">${x(asNomi.join(' · ') || '—')}</td>
           <td class="td-note">${x(a.note || '—')}</td>
           <td>${delBtn(a)}</td></tr>`;
       }).join('')}</tbody>
@@ -1499,7 +1505,7 @@ function openCasaModal(c) {
   /* set asilo select */
   syncAsiloSelects();
   const sel = document.getElementById('c-asilo-sel');
-  sel.value = c?.asilo_vicino || '';
+  sel.value = asiloList(c)[0] || '';
   document.getElementById('m-casa').hidden = false;
   setTimeout(() => document.getElementById('c-ind').focus(), 40);
 }

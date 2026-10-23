@@ -98,7 +98,10 @@
     },
     {
       "id": "casa-colleoni-9",
-      "asilo_vicino": "discoletti-del-piombo",
+      "asilo_vicino": [
+        "discoletti-del-piombo",
+        "happy-child-scarampo"
+      ],
       "canone": 1450,
       "distanza": "",
       "indirizzo": "Via Bartolomeo Colleoni 9",
@@ -154,7 +157,10 @@
     },
     {
       "id": "casa-fonzaso-5",
-      "asilo_vicino": "discoletti-del-piombo",
+      "asilo_vicino": [
+        "discoletti-del-piombo",
+        "happy-child-scarampo"
+      ],
       "canone": 1200,
       "distanza": "",
       "indirizzo": "Via Privata Fonzaso 5",
@@ -238,7 +244,10 @@
     },
     {
       "id": "casa-murillo-21",
-      "asilo_vicino": "discoletti-del-piombo",
+      "asilo_vicino": [
+        "discoletti-del-piombo",
+        "happy-child-scarampo"
+      ],
       "canone": 1400,
       "distanza": "",
       "indirizzo": "Viale Murillo 21",
@@ -252,7 +261,10 @@
     },
     {
       "id": "casa-murillo-23",
-      "asilo_vicino": "discoletti-del-piombo",
+      "asilo_vicino": [
+        "discoletti-del-piombo",
+        "happy-child-scarampo"
+      ],
       "canone": 1200,
       "distanza": "",
       "indirizzo": "Viale Murillo 23",
