@@ -70,7 +70,10 @@
   "case": [
     {
       "id": "casa-algardi-13",
-      "asilo_vicino": "discoletti-del-piombo",
+      "asilo_vicino": [
+        "discoletti-del-piombo",
+        "happy-child-scarampo"
+      ],
       "canone": 1400,
       "distanza": "",
       "indirizzo": "Via Alessandro Algardi 13",
@@ -334,7 +337,11 @@
     },
     {
       "id": "casa-ravizza-11",
-      "asilo_vicino": "compagnia-birichini-volterra",
+      "asilo_vicino": [
+        "compagnia-birichini-volterra",
+        "discoletti-del-piombo",
+        "happy-child-scarampo"
+      ],
       "canone": 1400,
       "distanza": "",
       "indirizzo": "Via Carlo Ravizza 11",
