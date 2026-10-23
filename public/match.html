@@ -2,26 +2,1415 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Match asilo-casa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nido & Casa</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap">
+
 <style>
-  :root{--bg:#f8f9fa;--surface:#fff;--border:#dee2e6;--text:#212529;--muted:#6c757d;--accent:#1a6fc4;}
-  @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;}}
-  :root[data-theme="dark"]{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;}
-  header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--surface);border-bottom:2px solid var(--border);}
-  header h1{font-size:16px;font-weight:700;color:var(--accent);}
-  .home-btn{padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:11px;text-decoration:none;}
-  .home-btn:hover{border-color:var(--accent);color:var(--accent);}
-  main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 16px;text-align:center;color:var(--muted);}
+:root {
+  --bg:           #F4F3EF;
+  --surface:      #FFFFFF;
+  --surface-2:    #F9F8F5;
+  --border:       #E4E2D9;
+  --fg:           #1A1916;
+  --fg-muted:     #706C62;
+  --accent:       #2B4FA0;
+  --accent-dark:  #1E3A78;
+  --accent-soft:  #EDF0FA;
+  --ok:           #166534;
+  --ok-bg:        #DCFCE7;
+  --warn:         #92400E;
+  --warn-bg:      #FEF3C7;
+  --danger:       #991B1B;
+  --danger-bg:    #FEE2E2;
+  --radius:       10px;
+  --shadow:       0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --font-d:       'DM Serif Display', Georgia, serif;
+  --font-b:       'Inter', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:          #131210;
+    --surface:     #1E1D1B;
+    --surface-2:   #262522;
+    --border:      #302F2C;
+    --fg:          #F0EFEA;
+    --fg-muted:    #8A8680;
+    --accent:      #628DE8;
+    --accent-dark: #82A8F0;
+    --accent-soft: #1A2442;
+    --ok:          #4ADE80;
+    --ok-bg:       #052E16;
+    --warn:        #FCD34D;
+    --warn-bg:     #1C1400;
+    --danger:      #F87171;
+    --danger-bg:   #1C0202;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:          #131210;
+  --surface:     #1E1D1B;
+  --surface-2:   #262522;
+  --border:      #302F2C;
+  --fg:          #F0EFEA;
+  --fg-muted:    #8A8680;
+  --accent:      #628DE8;
+  --accent-dark: #82A8F0;
+  --accent-soft: #1A2442;
+  --ok:          #4ADE80;
+  --ok-bg:       #052E16;
+  --warn:        #FCD34D;
+  --warn-bg:     #1C1400;
+  --danger:      #F87171;
+  --danger-bg:   #1C0202;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  font-family: var(--font-b);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--fg);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 101;
+  background: var(--surface);
+}
+
+/* ── HEADER ── */
+.app-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.header-top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 0 10px;
+  flex-wrap: wrap;
+}
+.header-title {
+  font-family: var(--font-d);
+  font-size: 21px;
+  font-weight: 400;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.2;
+}
+.header-sub { font-size: 12px; color: var(--fg-muted); }
+.home-btn {
+  align-self: center;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--fg);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.home-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  gap: 2px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 8px 14px 10px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-b);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: var(--fg); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+/* ── PANELS ── */
+.tab-panel { display: none; padding: 20px 0 88px; }
+.tab-panel.active { display: block; }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-b);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s;
+}
+.btn-add:hover { background: var(--accent-dark); }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.f-select {
+  flex: 1;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px 28px 7px 10px;
+  font-family: var(--font-b);
+  font-size: 13px;
+  color: var(--fg);
+  cursor: pointer;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23706C62' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color .15s;
+}
+.f-select:focus { outline: none; border-color: var(--accent); }
+
+/* ── CARDS ── */
+.card-list { display: flex; flex-direction: column; gap: 10px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+  min-width: 0;
+}
+.zona-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  margin-bottom: 10px;
+}
+.meta-item {
+  font-size: 12px;
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.meta-item b { color: var(--fg); font-weight: 600; }
+.cost-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.cost-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 13px;
+  min-width: 88px;
+}
+.pill-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--fg-muted);
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+.pill-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pill-value.hi { color: var(--accent); }
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 4px;
+  margin-right: 8px;
+}
+.card-link:hover { text-decoration: underline; }
+.card-note {
+  font-size: 12px;
+  color: var(--fg-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  margin-top: 8px;
+  line-height: 1.55;
+}
+.card-actions {
+  display: flex;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.btn-sm {
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-family: var(--font-b);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--fg-muted);
+  transition: background .1s, color .1s, border-color .1s;
+}
+.btn-sm:hover { background: var(--surface-2); color: var(--fg); }
+.btn-sm.del:hover { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+
+/* ── EMPTY STATE ── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 20px;
+  text-align: center;
+}
+.empty-ico { font-size: 34px; opacity: .45; }
+.empty-txt { font-size: 13px; color: var(--fg-muted); max-width: 260px; line-height: 1.55; }
+
+/* ── WELFARE PANEL ── */
+.welfare-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.welfare-icon { font-size: 24px; flex-shrink: 0; }
+.welfare-main { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+.welfare-title { font-size: 13px; font-weight: 600; color: var(--fg); }
+.welfare-input-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.welfare-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.welfare-currency {
+  position: absolute;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  pointer-events: none;
+}
+.welfare-input {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 10px 8px 26px;
+  font-family: var(--font-b);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+  width: 150px;
+  -webkit-appearance: none;
+  transition: border-color .15s;
+}
+.welfare-input:focus { outline: none; border-color: var(--accent); }
+.welfare-desc { font-size: 12px; color: var(--fg-muted); line-height: 1.4; }
+.welfare-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+.welfare-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--ok-bg);
+  border-radius: 8px;
+  padding: 6px 14px;
+  min-width: 90px;
+}
+.welfare-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--ok); letter-spacing: .05em; }
+.welfare-stat-value { font-size: 16px; font-weight: 700; color: var(--ok); font-variant-numeric: tabular-nums; }
+
+/* ── RIEPILOGO ── */
+.recap-section { margin-bottom: 26px; }
+.recap-head {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin: 0 0 12px;
+}
+.asilo-recap-section { margin-bottom: 28px; }
+.asilo-recap-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.asilo-recap-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.asilo-recap-retta {
+  font-size: 12px;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TOP-3 GRID ── */
+.top3-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+@media (max-width: 640px) { .top3-grid { grid-template-columns: 1fr; } }
+@media (min-width: 641px) and (max-width: 860px) { .top3-grid { grid-template-columns: 1fr 1fr; } }
+.top3-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.top3-rank {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.top3-addr {
+  padding: 3px 12px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.35;
+}
+.top3-zona { font-size: 11px; font-weight: 400; color: var(--fg-muted); }
+.top3-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; }
+.top3-row { display: flex; justify-content: space-between; font-size: 12px; gap: 8px; }
+.top3-row span:first-child { color: var(--fg-muted); }
+.top3-row span:last-child { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.top3-row.total-row { border-top: 1px solid var(--border); padding-top: 6px; margin-top: 2px; }
+.top3-row.total-row span:last-child { color: var(--accent); font-size: 13px; font-weight: 700; }
+.top3-row.total-row.hi span:last-child { color: var(--warn); }
+.top3-row.welfare-row span:last-child { color: var(--ok); font-weight: 700; }
+.top3-row.mesi-row span:last-child { color: var(--fg-muted); font-style: italic; font-weight: 400; }
+.top3-empty {
+  font-size: 12px;
+  color: var(--fg-muted);
+  font-style: italic;
+  padding: 16px 0;
+}
+
+/* ── FLAT TABLE ── */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.recap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 520px;
+}
+.recap-table th {
+  background: var(--surface-2);
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--fg-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.recap-table th.th-r { text-align: right; }
+.recap-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.recap-table tbody tr:last-child td { border-bottom: none; }
+.recap-table tbody tr:hover td { background: var(--surface-2); }
+.td-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.td-total { font-weight: 700; color: var(--accent); }
+.td-total.over { color: var(--warn); }
+.td-welfare { font-weight: 700; color: var(--ok); }
+.td-mesi { color: var(--fg-muted); font-style: italic; font-size: 11px; }
+.rank-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.td-casa-addr { font-weight: 600; line-height: 1.35; }
+.td-asilo-name { font-size: 11px; color: var(--fg-muted); }
+
+/* ── OLD COMBO (kept for fallback) ── */
+.combo-grid { display: flex; flex-direction: column; gap: 10px; }
+.combo-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.combo-top {
+  background: var(--accent-soft);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.combo-labels {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.combo-sep { font-weight: 400; color: var(--fg-muted); font-size: 11px; }
+.combo-total-wrap { text-align: right; flex-shrink: 0; }
+.combo-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.combo-total-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.combo-body { padding: 12px 14px; }
+.combo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 4px 0;
+  gap: 10px;
+}
+.combo-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+.combo-row span:first-child { color: var(--fg-muted); }
+.combo-row span:last-child { font-weight: 600; color: var(--fg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.combo-row.total-row { border-top: 2px solid var(--border) !important; margin-top: 4px; padding-top: 8px; }
+.combo-row.total-row span { color: var(--accent); font-weight: 700; font-size: 13px; }
+
+/* ── SPINNER ── */
+.spinner {
+  width: 22px; height: 22px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  margin: 40px auto;
+  display: block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── MODAL ── */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: env(safe-area-inset-top,0px) max(0px,env(safe-area-inset-left,0px)) env(safe-area-inset-bottom,0px) max(0px,env(safe-area-inset-right,0px));
+}
+@media (min-width: 560px) {
+  .modal-bg { align-items: center; }
+  .modal-box { border-radius: var(--radius) !important; max-width: 540px; }
+}
+.modal-box {
+  background: var(--surface);
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px 16px 0 0;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.modal-title {
+  font-family: var(--font-d);
+  font-size: 19px;
+  font-weight: 400;
+  margin: 0;
+  color: var(--fg);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 420px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+.form-grid .full { grid-column: 1 / -1; }
+.fg-label { display: flex; flex-direction: column; gap: 5px; }
+.fg-label span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.fg-label small { font-size: 11px; color: var(--fg-muted); font-weight: 400; letter-spacing: 0; text-transform: none; }
+.f-input, .f-area, .f-sel-modal {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-family: var(--font-b);
+  font-size: 14px;
+  color: var(--fg);
+  width: 100%;
+  transition: border-color .15s;
+  -webkit-appearance: none;
+}
+.f-input:focus, .f-area:focus, .f-sel-modal:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.f-area { min-height: 72px; resize: vertical; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
+.btn-cancel {
+  padding: 9px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-b);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+.btn-cancel:hover { background: var(--surface-2); }
+.btn-save {
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--accent);
+  font-family: var(--font-b);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-save:hover { background: var(--accent-dark); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--fg);
+  color: var(--bg);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 400;
+  opacity: 0;
+  transition: opacity .2s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.on { opacity: 1; }
 </style>
 </head>
 <body>
-<header>
-  <a href="/" class="home-btn" title="Torna alla home">🏠 Home</a>
-  <h1>Match asilo-casa</h1>
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div class="header-top">
+    <a href="/" class="home-btn" title="Torna alla home">🏠 Home</a>
+    <h1 class="header-title">Nido &amp; Casa</h1>
+    <span class="header-sub">Area milanese — ricerca familiare</span>
+  </div>
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="asili">
+      🏫 Asili Nido <span class="badge" id="badge-a">0</span>
+    </button>
+    <button class="tab-btn" data-tab="case">
+      🏠 Case <span class="badge" id="badge-c">0</span>
+    </button>
+    <button class="tab-btn" data-tab="recap">
+      📊 Riepilogo
+    </button>
+  </nav>
 </header>
-<main><p>Pagina in arrivo.</p></main>
+
+<!-- ── TAB ASILI ── -->
+<div class="tab-panel active" id="panel-asili">
+  <div class="toolbar">
+    <span class="section-eyebrow">Asili nido selezionati</span>
+    <button class="btn-add" id="btn-new-asilo">+ Aggiungi asilo</button>
+  </div>
+  <div class="card-list" id="list-a">
+    <div class="spinner" id="sp-a"></div>
+  </div>
+</div>
+
+<!-- ── TAB CASE ── -->
+<div class="tab-panel" id="panel-case">
+  <div class="toolbar">
+    <span class="section-eyebrow">Case in affitto</span>
+    <button class="btn-add" id="btn-new-casa">+ Aggiungi casa</button>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">🏫 Filtra per asilo:</span>
+    <select class="f-select" id="filter-asilo">
+      <option value="">Tutti gli asili</option>
+    </select>
+  </div>
+  <div class="card-list" id="list-c">
+    <div class="spinner" id="sp-c"></div>
+  </div>
+</div>
+
+<!-- ── TAB RIEPILOGO ── -->
+<div class="tab-panel" id="panel-recap">
+  <!-- welfare panel lives OUTSIDE recap-root so it survives re-renders -->
+  <div class="welfare-panel">
+    <div class="welfare-icon">🎁</div>
+    <div class="welfare-main">
+      <div class="welfare-title">Bonus Welfare — rimborso asilo nido</div>
+      <div class="welfare-input-row">
+        <div class="welfare-input-wrap">
+          <span class="welfare-currency">€</span>
+          <input class="welfare-input" id="welfare-input" type="number" min="0" step="100" placeholder="0">
+        </div>
+        <span class="welfare-desc">importo annuo disponibile<br>per rimborso nido</span>
+      </div>
+    </div>
+    <div class="welfare-stats" id="welfare-stats"></div>
+  </div>
+  <div id="recap-root"><div class="spinner"></div></div>
+</div>
+
+<!-- ── MODAL ASILO ── -->
+<div class="modal-bg" id="m-asilo" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <h2 class="modal-title" id="m-asilo-ttl">Nuovo asilo nido</h2>
+    <input type="hidden" id="a-id">
+    <div class="form-grid">
+      <label class="fg-label full"><span>Nome asilo *</span>
+        <input class="f-input" id="a-nome" type="text" placeholder="Asilo Nido Il Girasole">
+      </label>
+      <label class="fg-label"><span>Zona / Comune</span>
+        <input class="f-input" id="a-zona" type="text" placeholder="Monza">
+      </label>
+      <label class="fg-label"><span>Indirizzo</span>
+        <input class="f-input" id="a-ind" type="text" placeholder="Via Roma 10">
+      </label>
+      <label class="fg-label full"><span>Link sito / annuncio</span>
+        <input class="f-input" id="a-link" type="url" placeholder="https://…">
+      </label>
+      <label class="fg-label"><span>Retta standard €/mese</span>
+        <input class="f-input" id="a-std" type="number" min="0" step="10" placeholder="450">
+        <small>Orario base (es. fino alle 16)</small>
+      </label>
+      <label class="fg-label"><span>Retta estesa €/mese</span>
+        <input class="f-input" id="a-est" type="number" min="0" step="10" placeholder="600">
+        <small>Con prolungamento fino alle 18</small>
+      </label>
+      <label class="fg-label full"><span>Note</span>
+        <textarea class="f-area" id="a-note" placeholder="Lista d'attesa, pasti inclusi, iscrizione, servizi…"></textarea>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="a-cancel">Annulla</button>
+      <button class="btn-save" id="a-save">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL CASA ── -->
+<div class="modal-bg" id="m-casa" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <h2 class="modal-title" id="m-casa-ttl">Nuova casa in affitto</h2>
+    <input type="hidden" id="c-id">
+    <div class="form-grid">
+      <label class="fg-label full"><span>Indirizzo *</span>
+        <input class="f-input" id="c-ind" type="text" placeholder="Via Garibaldi 5, Monza">
+      </label>
+      <label class="fg-label"><span>Zona / Comune</span>
+        <input class="f-input" id="c-zona" type="text" placeholder="Monza">
+      </label>
+      <label class="fg-label"><span>Asilo nido di riferimento</span>
+        <select class="f-sel-modal" id="c-asilo-sel">
+          <option value="">— nessuno —</option>
+        </select>
+      </label>
+      <label class="fg-label full"><span>Link annuncio</span>
+        <input class="f-input" id="c-link" type="url" placeholder="https://…">
+      </label>
+      <label class="fg-label"><span>Canone €/mese</span>
+        <input class="f-input" id="c-can" type="number" min="0" step="50" placeholder="1200">
+      </label>
+      <label class="fg-label"><span>Spese condominiali €/mese</span>
+        <input class="f-input" id="c-sp" type="number" min="0" step="10" placeholder="80">
+      </label>
+      <label class="fg-label"><span>Tipologia</span>
+        <input class="f-input" id="c-tipo" type="text" placeholder="Trilocale / 2 camere">
+      </label>
+      <label class="fg-label"><span>Superficie m²</span>
+        <input class="f-input" id="c-mq" type="number" min="0" step="1" placeholder="75">
+      </label>
+      <label class="fg-label full"><span>Distanza dall'asilo</span>
+        <input class="f-input" id="c-dist" type="text" placeholder="5 min a piedi, 10 min in auto">
+      </label>
+      <label class="fg-label full"><span>Note</span>
+        <textarea class="f-area" id="c-note" placeholder="Piano, ascensore, box auto, riscaldamento, disponibilità, agenzia…"></textarea>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="c-cancel">Annulla</button>
+      <button class="btn-save" id="c-save">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script src="/db-client.js"></script>
+<script>
+'use strict';
+
+/* ────────────────────────────────────────────── STATE */
+let db    = null;
+let asili = [];
+let case_ = [];
+let unsubA = null, unsubC = null;
+
+/* welfare — persisted in localStorage */
+let welfareAnnuo = 0;
+try { welfareAnnuo = parseInt(localStorage.getItem('welfare_annuo') || '0', 10) || 0; } catch(e) {}
+
+/* ────────────────────────────────────────────── BOOT */
+(async () => {
+  /* init welfare input early */
+  const wInp = document.getElementById('welfare-input');
+  if (wInp) {
+    if (welfareAnnuo) wInp.value = welfareAnnuo;
+    updateWelfareStats();
+    wInp.addEventListener('input', () => {
+      welfareAnnuo = parseInt(wInp.value, 10) || 0;
+      try { localStorage.setItem('welfare_annuo', welfareAnnuo); } catch(e) {}
+      updateWelfareStats();
+      if (document.getElementById('panel-recap').classList.contains('active')) renderRecap();
+    });
+  }
+
+  db = createRestDb();
+  if (!db) { showDbError(); return; }
+
+  unsubA = db.collection('asili').orderBy('ts','asc')
+    .onSnapshot(snap => {
+      asili = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('badge-a').textContent = asili.length;
+      renderAsili();
+      renderCase();   /* refresh asilo names + filter options */
+      syncAsiloSelects();
+      if (document.getElementById('panel-recap').classList.contains('active')) renderRecap();
+    }, err => console.error('asili', err));
+
+  unsubC = db.collection('case').orderBy('ts','asc')
+    .onSnapshot(snap => {
+      case_ = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('badge-c').textContent = case_.length;
+      renderCase();
+      if (document.getElementById('panel-recap').classList.contains('active')) renderRecap();
+    }, err => console.error('case', err));
+})();
+
+function showDbError() {
+  ['sp-a','sp-c'].forEach(id => document.getElementById(id)?.remove());
+  const msg = `<div class="empty"><div class="empty-ico">🔒</div><div class="empty-txt">Database non disponibile. Riprova più tardi.</div></div>`;
+  document.getElementById('list-a').innerHTML = msg;
+  document.getElementById('list-c').innerHTML = msg;
+  document.getElementById('recap-root').innerHTML = msg;
+}
+
+/* keep both asilo selects (filter + modal) in sync */
+function syncAsiloSelects() {
+  ['filter-asilo', 'c-asilo-sel'].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    const prev = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    asili.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      opt.textContent = a.nome || a.id;
+      sel.appendChild(opt);
+    });
+    if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
+  });
+}
+
+/* ────────────────────────────────────────────── WELFARE */
+function updateWelfareStats() {
+  const el = document.getElementById('welfare-stats');
+  if (!el) return;
+  if (welfareAnnuo > 0) {
+    const mensile = Math.round(welfareAnnuo / 12);
+    el.innerHTML = `
+      <div class="welfare-stat">
+        <div class="welfare-stat-label">Mensile equivalente</div>
+        <div class="welfare-stat-value">${f(mensile)}/mese</div>
+      </div>`;
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+/* ────────────────────────────────────────────── TABS */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('panel-' + btn.dataset.tab);
+    panel.classList.add('active');
+    if (btn.dataset.tab === 'recap') renderRecap();
+  });
+});
+
+/* filter change */
+document.getElementById('filter-asilo').addEventListener('change', renderCase);
+
+/* ────────────────────────────────────────────── RENDER: ASILI */
+function renderAsili() {
+  const el = document.getElementById('list-a');
+  document.getElementById('sp-a')?.remove();
+  if (!asili.length) {
+    el.innerHTML = `<div class="empty">
+      <div class="empty-ico">🏫</div>
+      <div class="empty-txt">Nessun asilo ancora aggiunto.<br>Clicca "+ Aggiungi asilo" per iniziare.</div>
+    </div>`;
+    return;
+  }
+  el.innerHTML = '';
+  asili.forEach(a => {
+    const card = el.appendChild(document.createElement('div'));
+    card.className = 'card';
+    const diff = (a.retta_estesa && a.retta_standard) ? a.retta_estesa - a.retta_standard : null;
+    card.innerHTML = `
+      <div class="card-header">
+        <p class="card-name">${x(a.nome||'—')}</p>
+        ${a.zona ? `<span class="zona-chip">${x(a.zona)}</span>` : ''}
+      </div>
+      ${a.indirizzo ? `<div class="card-meta"><span class="meta-item">📍 ${x(a.indirizzo)}</span></div>` : ''}
+      <div class="cost-row">
+        ${a.retta_standard ? `<div class="cost-pill">
+          <span class="pill-label">Retta std</span>
+          <span class="pill-value">${f(a.retta_standard)}</span>
+        </div>` : ''}
+        ${a.retta_estesa ? `<div class="cost-pill">
+          <span class="pill-label">Fino alle 18</span>
+          <span class="pill-value hi">${f(a.retta_estesa)}</span>
+        </div>` : ''}
+        ${diff !== null ? `<div class="cost-pill">
+          <span class="pill-label">+Prolungamento</span>
+          <span class="pill-value">${f(diff)}</span>
+        </div>` : ''}
+      </div>
+      ${a.link ? renderLinks(a.link) : ''}
+      ${a.note ? `<div class="card-note">${x(a.note)}</div>` : ''}
+      <div class="card-actions">
+        <button class="btn-sm" data-act="ea" data-id="${x(a.id)}">✏️ Modifica</button>
+        <button class="btn-sm del" data-act="da" data-id="${x(a.id)}">🗑 Elimina</button>
+      </div>`;
+  });
+}
+
+/* ────────────────────────────────────────────── RENDER: CASE */
+function renderCase() {
+  const el = document.getElementById('list-c');
+  document.getElementById('sp-c')?.remove();
+
+  /* repopulate filter (preserving selection) */
+  syncAsiloSelects();
+  const filterVal = document.getElementById('filter-asilo').value;
+  const filtered  = filterVal ? case_.filter(c => c.asilo_vicino === filterVal) : case_;
+
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty">
+      <div class="empty-ico">🏠</div>
+      <div class="empty-txt">${filterVal ? 'Nessuna casa per questo asilo.' : 'Nessuna casa ancora aggiunta.<br>Clicca "+ Aggiungi casa" per iniziare.'}</div>
+    </div>`;
+    return;
+  }
+  el.innerHTML = '';
+  filtered.forEach(c => {
+    const tot = (c.canone||0) + (c.spese||0);
+    const asiloNome = asili.find(a => a.id === c.asilo_vicino)?.nome || c.asilo_vicino || null;
+    const card = el.appendChild(document.createElement('div'));
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <p class="card-name">${x(c.indirizzo||'—')}</p>
+        ${c.zona ? `<span class="zona-chip">${x(c.zona)}</span>` : ''}
+      </div>
+      <div class="card-meta">
+        ${c.tipo ? `<span class="meta-item">🛏 <b>${x(c.tipo)}</b></span>` : ''}
+        ${c.mq  ? `<span class="meta-item">📐 <b>${c.mq} m²</b></span>` : ''}
+        ${c.distanza ? `<span class="meta-item">🚶 ${x(c.distanza)} dall'asilo</span>` : ''}
+        ${asiloNome ? `<span class="meta-item">🏫 <b>${x(asiloNome)}</b></span>` : ''}
+      </div>
+      <div class="cost-row">
+        <div class="cost-pill">
+          <span class="pill-label">Canone</span>
+          <span class="pill-value">${f(c.canone)}</span>
+        </div>
+        ${c.spese ? `<div class="cost-pill">
+          <span class="pill-label">Spese cond.</span>
+          <span class="pill-value">${f(c.spese)}</span>
+        </div>` : ''}
+        <div class="cost-pill">
+          <span class="pill-label">Totale casa</span>
+          <span class="pill-value hi">${f(tot)}</span>
+        </div>
+      </div>
+      ${c.link ? renderLinks(c.link) : ''}
+      ${c.note ? `<div class="card-note">${x(c.note)}</div>` : ''}
+      <div class="card-actions">
+        <button class="btn-sm" data-act="ec" data-id="${x(c.id)}">✏️ Modifica</button>
+        <button class="btn-sm del" data-act="dc" data-id="${x(c.id)}">🗑 Elimina</button>
+      </div>`;
+  });
+}
+
+/* ────────────────────────────────────────────── RENDER: RIEPILOGO */
+function renderRecap() {
+  const root = document.getElementById('recap-root');
+  if (!root) return;
+
+  const welfareMensile = welfareAnnuo / 12;
+
+  if (!asili.length && !case_.length) {
+    root.innerHTML = `<div class="empty">
+      <div class="empty-ico">📊</div>
+      <div class="empty-txt">Aggiungi asili e case per vedere il confronto costi.</div>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+
+  /* ── TOP-3 per asilo ── */
+  if (asili.length) {
+    html += `<p class="recap-head">Top 3 case per asilo — ordinate per costo totale</p>`;
+    asili.forEach(a => {
+      const rEst = a.retta_estesa || a.retta_standard || 0;
+      const mesiCopertura = (rEst > 0 && welfareAnnuo > 0)
+        ? (welfareAnnuo / rEst).toFixed(1)
+        : null;
+
+      const caseAsilo = case_
+        .filter(c => c.asilo_vicino === a.id)
+        .map(c => {
+          const totCasa = (c.canone||0) + (c.spese||0);
+          const totEst  = totCasa + rEst;
+          const rettaDopoWelfare = welfareMensile > 0 ? Math.max(0, rEst - welfareMensile) : null;
+          const totWelfare = rettaDopoWelfare !== null ? totCasa + rettaDopoWelfare : null;
+          return { ...c, totCasa, totEst, totWelfare };
+        })
+        .sort((p, q) => p.totEst - q.totEst)
+        .slice(0, 3);
+
+      html += `<div class="asilo-recap-section">
+        <div class="asilo-recap-title">
+          <span>🏫</span>
+          <span class="asilo-recap-name">${x(a.nome||'—')}</span>
+          ${a.zona ? `<span class="zona-chip">${x(a.zona)}</span>` : ''}
+          <span class="asilo-recap-retta">Retta 18h: ${f(rEst)}/mese</span>
+          ${mesiCopertura ? `<span class="asilo-recap-retta" style="color:var(--ok)">· welfare copre ${mesiCopertura} mesi</span>` : ''}
+        </div>`;
+
+      if (!caseAsilo.length) {
+        html += `<div class="top3-empty">Nessuna casa associata a questo asilo.</div>`;
+      } else {
+        html += `<div class="top3-grid">`;
+        const medals = ['🥇','🥈','🥉'];
+        caseAsilo.forEach((c, i) => {
+          const hi = c.totEst > 2200;
+          html += `<div class="top3-card">
+            <div class="top3-rank">${medals[i]||'#'+(i+1)} Posto ${i+1}</div>
+            <div class="top3-addr">${x(c.indirizzo||'—')}
+              ${c.zona ? `<div class="top3-zona">${x(c.zona)}</div>` : ''}
+            </div>
+            <div class="top3-body">
+              <div class="top3-row"><span>Retta nido (18h)</span><span>${f(rEst)}</span></div>
+              <div class="top3-row"><span>Affitto (canone+spese)</span><span>${f(c.totCasa)}</span></div>
+              ${c.mq ? `<div class="top3-row"><span>Superficie</span><span>${c.mq} m²</span></div>` : ''}
+              ${c.distanza ? `<div class="top3-row"><span>Distanza</span><span>${x(c.distanza)}</span></div>` : ''}
+              <div class="top3-row total-row${hi?' hi':''}"><span>Costo totale</span><span>${f(c.totEst)}/mese</span></div>
+              ${c.totWelfare !== null ? `<div class="top3-row welfare-row"><span>Con welfare</span><span>${f(c.totWelfare)}/mese</span></div>` : ''}
+              ${mesiCopertura ? `<div class="top3-row mesi-row"><span>Welfare copre</span><span>${mesiCopertura} mesi retta</span></div>` : ''}
+            </div>
+          </div>`;
+        });
+        html += `</div>`;
+      }
+      html += `</div>`;
+    });
+  }
+
+  /* ── TABELLA FLAT ── */
+  if (case_.length && asili.length) {
+    const rows = case_
+      .map(c => {
+        const a = asili.find(aa => aa.id === c.asilo_vicino);
+        if (!a) return null;
+        const rEst    = a.retta_estesa || a.retta_standard || 0;
+        const totCasa = (c.canone||0) + (c.spese||0);
+        const totEst  = totCasa + rEst;
+        const rettaDopoWelfare = welfareMensile > 0 ? Math.max(0, rEst - welfareMensile) : null;
+        const totWelfare = rettaDopoWelfare !== null ? totCasa + rettaDopoWelfare : null;
+        const mesiCop = (rEst > 0 && welfareAnnuo > 0) ? (welfareAnnuo / rEst).toFixed(1) : null;
+        return { c, a, rEst, totCasa, totEst, totWelfare, mesiCop };
+      })
+      .filter(Boolean)
+      .sort((p, q) => p.totEst - q.totEst);
+
+    const showWelfare = welfareAnnuo > 0;
+
+    html += `<p class="recap-head" style="margin-top:28px">Tutte le combinazioni — ordinate per costo crescente</p>
+    <div class="table-wrap">
+      <table class="recap-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Casa</th>
+            <th>Asilo</th>
+            <th class="th-r">Retta fino 18h</th>
+            <th class="th-r">Affitto (C+S)</th>
+            <th class="th-r">Costo totale</th>
+            ${showWelfare ? `<th class="th-r">Con welfare</th><th class="th-r">Mesi coperti</th>` : ''}
+          </tr>
+        </thead>
+        <tbody>`;
+
+    rows.forEach(({ c, a, rEst, totCasa, totEst, totWelfare, mesiCop }, i) => {
+      const hi = totEst > 2200;
+      html += `<tr>
+        <td><span class="rank-num">${i+1}</span></td>
+        <td>
+          <div class="td-casa-addr">${x(c.indirizzo||'—')}</div>
+          ${c.zona ? `<div class="td-asilo-name">${x(c.zona)}</div>` : ''}
+          ${c.mq ? `<div class="td-asilo-name">${c.mq} m²${c.tipo?` · ${x(c.tipo)}`:''}</div>` : (c.tipo ? `<div class="td-asilo-name">${x(c.tipo)}</div>` : '')}
+        </td>
+        <td>
+          <div style="font-weight:600;font-size:12px">${x(a.nome||'—')}</div>
+          ${a.zona ? `<div class="td-asilo-name">${x(a.zona)}</div>` : ''}
+          ${c.distanza ? `<div class="td-asilo-name">🚶 ${x(c.distanza)}</div>` : ''}
+        </td>
+        <td class="td-num">${f(rEst)}</td>
+        <td class="td-num">${f(totCasa)}</td>
+        <td class="td-num td-total${hi?' over':''}">${f(totEst)}</td>
+        ${showWelfare ? `<td class="td-num td-welfare">${totWelfare !== null ? f(totWelfare) : '—'}</td><td class="td-num td-mesi">${mesiCop ? mesiCop+' mesi' : '—'}</td>` : ''}
+      </tr>`;
+    });
+
+    html += `</tbody></table></div>`;
+  }
+
+  if (!html) {
+    html = `<div class="empty">
+      <div class="empty-ico">📊</div>
+      <div class="empty-txt">Aggiungi asili e case per vedere il confronto costi.</div>
+    </div>`;
+  }
+
+  root.innerHTML = html;
+}
+
+/* ────────────────────────────────────────────── HELPERS */
+function renderLinks(linkStr) {
+  if (!linkStr) return '';
+  const urls = linkStr.split('|').map(s => s.trim()).filter(Boolean);
+  return urls.map((url, i) =>
+    `<a class="card-link" href="${x(url)}" target="_blank" rel="noopener">🔗 ${i===0?'Apri annuncio':'Secondo annuncio'}</a>`
+  ).join('');
+}
+
+/* ────────────────────────────────────────────── EVENT DELEGATION */
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn || !db) return;
+  const { act, id } = btn.dataset;
+  if (act === 'ea') openAsiloModal(asili.find(a => a.id === id));
+  if (act === 'da') {
+    const a = asili.find(a => a.id === id);
+    if (confirm(`Eliminare "${a?.nome||id}"?`)) {
+      await db.doc('asili/'+id).delete();
+      toast('Asilo eliminato');
+    }
+  }
+  if (act === 'ec') openCasaModal(case_.find(c => c.id === id));
+  if (act === 'dc') {
+    const c = case_.find(c => c.id === id);
+    if (confirm(`Eliminare la casa a "${c?.indirizzo||id}"?`)) {
+      await db.doc('case/'+id).delete();
+      toast('Casa eliminata');
+    }
+  }
+});
+
+/* ────────────────────────────────────────────── MODAL ASILO */
+document.getElementById('btn-new-asilo').addEventListener('click', () => openAsiloModal(null));
+document.getElementById('a-cancel').addEventListener('click', () => closeModal('m-asilo'));
+document.getElementById('m-asilo').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('m-asilo'); });
+
+document.getElementById('a-save').addEventListener('click', async () => {
+  const nome = v('a-nome');
+  if (!nome) { document.getElementById('a-nome').focus(); return; }
+  const data = {
+    nome,
+    zona:           v('a-zona'),
+    indirizzo:      v('a-ind'),
+    link:           v('a-link'),
+    retta_standard: n('a-std'),
+    retta_estesa:   n('a-est'),
+    note:           v('a-note'),
+  };
+  const editId = document.getElementById('a-id').value;
+  if (editId) {
+    data.ts = asili.find(a=>a.id===editId)?.ts || Date.now();
+    await db.doc('asili/'+editId).set(data);
+    toast('Asilo aggiornato');
+  } else {
+    data.ts = Date.now();
+    await db.collection('asili').add(data);
+    toast('Asilo aggiunto');
+  }
+  closeModal('m-asilo');
+});
+
+function openAsiloModal(a) {
+  document.getElementById('m-asilo-ttl').textContent = a ? 'Modifica asilo' : 'Nuovo asilo nido';
+  document.getElementById('a-id').value = a?.id || '';
+  sv('a-nome', a?.nome||'');
+  sv('a-zona', a?.zona||'');
+  sv('a-ind',  a?.indirizzo||'');
+  sv('a-link', a?.link||'');
+  sv('a-std',  a?.retta_standard||'');
+  sv('a-est',  a?.retta_estesa||'');
+  sv('a-note', a?.note||'');
+  document.getElementById('m-asilo').hidden = false;
+  setTimeout(() => document.getElementById('a-nome').focus(), 40);
+}
+
+/* ────────────────────────────────────────────── MODAL CASA */
+document.getElementById('btn-new-casa').addEventListener('click', () => openCasaModal(null));
+document.getElementById('c-cancel').addEventListener('click', () => closeModal('m-casa'));
+document.getElementById('m-casa').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('m-casa'); });
+
+document.getElementById('c-save').addEventListener('click', async () => {
+  const indirizzo = v('c-ind');
+  if (!indirizzo) { document.getElementById('c-ind').focus(); return; }
+  const data = {
+    indirizzo,
+    zona:         v('c-zona'),
+    asilo_vicino: document.getElementById('c-asilo-sel').value,
+    link:         v('c-link'),
+    canone:       n('c-can'),
+    spese:        n('c-sp'),
+    tipo:         v('c-tipo'),
+    mq:           n('c-mq'),
+    distanza:     v('c-dist'),
+    note:         v('c-note'),
+  };
+  const editId = document.getElementById('c-id').value;
+  if (editId) {
+    data.ts = case_.find(c=>c.id===editId)?.ts || Date.now();
+    await db.doc('case/'+editId).set(data);
+    toast('Casa aggiornata');
+  } else {
+    data.ts = Date.now();
+    await db.collection('case').add(data);
+    toast('Casa aggiunta');
+  }
+  closeModal('m-casa');
+});
+
+function openCasaModal(c) {
+  document.getElementById('m-casa-ttl').textContent = c ? 'Modifica casa' : 'Nuova casa in affitto';
+  document.getElementById('c-id').value = c?.id || '';
+  sv('c-ind',   c?.indirizzo||'');
+  sv('c-zona',  c?.zona||'');
+  sv('c-link',  c?.link||'');
+  sv('c-can',   c?.canone||'');
+  sv('c-sp',    c?.spese||'');
+  sv('c-tipo',  c?.tipo||'');
+  sv('c-mq',    c?.mq||'');
+  sv('c-dist',  c?.distanza||'');
+  sv('c-note',  c?.note||'');
+  /* set asilo select */
+  syncAsiloSelects();
+  const sel = document.getElementById('c-asilo-sel');
+  sel.value = c?.asilo_vicino || '';
+  document.getElementById('m-casa').hidden = false;
+  setTimeout(() => document.getElementById('c-ind').focus(), 40);
+}
+
+/* ────────────────────────────────────────────── UTILS */
+function closeModal(id) { document.getElementById(id).hidden = true; }
+function v(id) { return (document.getElementById(id).value||'').trim(); }
+function n(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function sv(id, val) { document.getElementById(id).value = val; }
+function x(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function f(val) {
+  if (!val && val!==0) return '—';
+  return '€ ' + Number(val).toLocaleString('it-IT', {minimumFractionDigits:0, maximumFractionDigits:0});
+}
+let toastTmr;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(() => el.classList.remove('on'), 2300);
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!document.getElementById('m-asilo').hidden) closeModal('m-asilo');
+    if (!document.getElementById('m-casa').hidden) closeModal('m-casa');
+  }
+});
+</script>
 </body>
 </html>
