@@ -30,6 +30,8 @@ const server = http.createServer((req, res) => {
     return res.end('Forbidden');
   }
   if (urlPath.endsWith('/')) filePath = path.join(filePath, 'index.html');
+  // URL senza estensione: /cerca -> cerca.html
+  else if (!path.extname(filePath)) filePath += '.html';
 
   fs.readFile(filePath, (err, data) => {
     if (err) {

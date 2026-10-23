@@ -4,687 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asili Nido Milano</title>
-<!-- Leaflet CSS inlined per CSP artifact -->
-<style>
-.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
-.leaflet-container{overflow:hidden}
-.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}
-.leaflet-tile::selection{background:transparent}
-.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}
-.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}
-.leaflet-marker-icon,.leaflet-marker-shadow{display:block}
-.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}
-.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}
-.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}
-.leaflet-container.leaflet-touch-zoom{touch-action:pan-x pan-y}
-.leaflet-container.leaflet-touch-drag{touch-action:none;touch-action:pinch-zoom}
-.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{touch-action:none}
-.leaflet-container{-webkit-tap-highlight-color:transparent}
-.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}
-.leaflet-tile{filter:inherit;visibility:hidden}
-.leaflet-tile-loaded{visibility:inherit}
-.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}
-.leaflet-overlay-pane svg{-moz-user-select:none}
-.leaflet-pane{z-index:400}
-.leaflet-tile-pane{z-index:200}
-.leaflet-overlay-pane{z-index:400}
-.leaflet-shadow-pane{z-index:500}
-.leaflet-marker-pane{z-index:600}
-.leaflet-tooltip-pane{z-index:650}
-.leaflet-popup-pane{z-index:700}
-.leaflet-map-pane canvas{z-index:100}
-.leaflet-map-pane svg{z-index:200}
-.leaflet-vml-shape{width:1px;height:1px}
-.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}
-.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}
-.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
-.leaflet-top{top:0}
-.leaflet-right{right:0}
-.leaflet-bottom{bottom:0}
-.leaflet-left{left:0}
-.leaflet-control{float:left;clear:both}
-.leaflet-right .leaflet-control{float:right}
-.leaflet-top .leaflet-control{margin-top:10px}
-.leaflet-bottom .leaflet-control{margin-bottom:10px}
-.leaflet-left .leaflet-control{margin-left:10px}
-.leaflet-right .leaflet-control{margin-right:10px}
-.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}
-.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}
-.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}
-svg.leaflet-zoom-animated{will-change:transform}
-.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}
-.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}
-.leaflet-zoom-anim .leaflet-zoom-animated{will-change:transform}
-.leaflet-zoom-box{background:rgba(51,181,229,.2);border:2px dotted #38f}
-.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.65);border-radius:4px}
-.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}
-.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}
-.leaflet-bar a:hover,.leaflet-bar a:focus{background-color:#f4f4f4}
-.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}
-.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}
-.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}
-.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}
-.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}
-.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}
-.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}
-.leaflet-touch .leaflet-control-zoom-in{font-size:22px}
-.leaflet-touch .leaflet-control-zoom-out{font-size:20px}
-.leaflet-control-attribution{background:rgba(255,255,255,.8);margin:0}
-.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}
-.leaflet-control-attribution a{text-decoration:none}
-.leaflet-control-attribution a:hover,.leaflet-control-attribution a:focus{text-decoration:underline}
-.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}
-.leaflet-left .leaflet-control-scale{margin-left:5px}
-.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}
-.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;font-size:11px;white-space:nowrap;overflow:hidden;-moz-box-sizing:border-box;box-sizing:border-box;background:rgba(255,255,255,.8)}
-.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}
-.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}
-.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{box-shadow:none}
-.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}
-.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px rgba(0,0,0,.4)}
-.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}
-.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-left:-20px;overflow:hidden;pointer-events:none}
-.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:none;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--surface,#fff);color:var(--text,#333)}
-.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}
-.leaflet-popup-content p{margin:17px 0 0 0}
-.leaflet-popup-tip-container{margin-left:-20px}
-.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:transparent}
-.leaflet-popup-close-button:hover,.leaflet-popup-close-button:focus{color:#585858}
-.leaflet-popup-scrolled{overflow:auto}
-.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}
-.leaflet-oldie .leaflet-popup-tip{width:24px;-ms-filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";filter:progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)}
-.leaflet-div-icon{background:#fff;border:1px solid #666}
-.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.4)}
-.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}
-.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:""}
-.leaflet-tooltip-bottom{margin-top:6px}
-.leaflet-tooltip-top{margin-top:-6px}
-.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}
-.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}
-.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}
-.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}
-.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}
-.leaflet-tooltip-left{margin-left:-6px}
-.leaflet-tooltip-right{margin-left:6px}
-.leaflet-tooltip-left:before{top:50%;margin-top:-6px}
-.leaflet-tooltip-right:before{top:50%;margin-top:-6px}
-.leaflet-control-attribution{font-size:11px}
-</style>
 <style>
   :root{
     --bg:#f8f9fa;--surface:#fff;--border:#dee2e6;--text:#212529;--muted:#6c757d;
     --accent:#1a6fc4;--accent-l:#e8f0fb;
-    --c-card:#fff;--c-border:#dee2e6;--c-text:#212529;--c-muted:#6c757d;--c-accent:#1a6fc4;
     --green:#198754;--green-l:#d1e7dd;
-    --yellow:#856404;--yellow-l:#fff3cd;
-    --red:#842029;--red-l:#f8d7da;
   }
   @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
     --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;
     --accent:#58a6ff;--accent-l:#0d2149;
-    --c-card:#161b22;--c-border:#30363d;--c-text:#e6edf3;--c-muted:#8b949e;--c-accent:#58a6ff;
-    --green:#3fb950;--green-l:#0d2b1a;--yellow:#d29922;--yellow-l:#2d1e0f;--red:#f85149;--red-l:#2d0f0f;
+    --green:#3fb950;--green-l:#0d2b1a;
   }}
   :root[data-theme="dark"]{
     --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;
     --accent:#58a6ff;--accent-l:#0d2149;
-    --c-card:#161b22;--c-border:#30363d;--c-text:#e6edf3;--c-muted:#8b949e;--c-accent:#58a6ff;
-    --green:#3fb950;--green-l:#0d2b1a;--yellow:#d29922;--yellow-l:#2d1e0f;--red:#f85149;--red-l:#2d0f0f;
+    --green:#3fb950;--green-l:#0d2b1a;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;overflow:hidden;}
-  body{display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;line-height:1.4;}
-  /* page header */
-  #page-hdr{flex-shrink:0;background:var(--surface);border-bottom:2px solid var(--border);z-index:100;}
-  .header{padding:8px 14px 7px;}
-  .header-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
-  .header-top h1{font-size:15px;font-weight:700;color:var(--accent);white-space:nowrap;}
-  .header-top h1 span{font-size:10px;font-weight:400;color:var(--muted);margin-left:5px;}
-  .theme-btn{margin-left:auto;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer;font-size:11px;white-space:nowrap;}
-  .controls{display:flex;gap:5px;flex-wrap:wrap;}
-  .controls input,.controls select{padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:12px;outline:none;}
-  .controls input:focus,.controls select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-l);}
-  .controls input{flex:1;min-width:120px;}
-  .stats{padding:3px 14px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);}
-  .stats b{color:var(--text);}
-  /* panels */
-  #main-panels{flex:1;display:flex;overflow:hidden;}
-  .panel{display:flex;flex-direction:column;flex:1;overflow:hidden;border-right:1px solid var(--border);min-width:0;}
-  .panel:last-child{border-right:none;}
-  .panel.collapsed{flex:0 0 auto;}
-  .panel-hdr{display:flex;align-items:center;gap:6px;padding:5px 10px;background:var(--surface);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0;}
-  .panel-hdr:hover{background:var(--accent-l);}
-  .ph-count{color:var(--muted);font-weight:400;font-size:11px;}
-  .ph-toggle{margin-left:auto;color:var(--muted);font-size:10px;transition:transform .2s;display:inline-block;}
-  .panel.collapsed .ph-toggle{transform:rotate(-90deg);}
-  .panel-body{flex:1;overflow-y:auto;overflow-x:auto;}
-  .panel.collapsed .panel-body{display:none;}
-  /* table */
-  table{width:100%;border-collapse:collapse;}
-  thead{background:var(--surface);position:sticky;top:0;z-index:50;}
-  thead th{padding:5px 8px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
-  thead th:hover,thead th.sorted{color:var(--accent);}
-  tbody tr{border-bottom:1px solid var(--border);}
-  tbody tr:hover{background:var(--accent-l);}
-  td{padding:4px 8px;vertical-align:middle;}
-  .nome a{color:var(--accent);text-decoration:none;font-weight:600;font-size:12px;}
-  .nome a:hover{text-decoration:underline;}
-  .badge18{display:inline-block;padding:0 4px;border-radius:20px;font-size:9px;font-weight:700;background:var(--green-l);color:var(--green);margin-left:3px;}
-  .ind{font-size:11px;color:var(--muted);max-width:180px;}
-  .cap-pill{display:inline-block;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:600;background:var(--accent-l);color:var(--accent);}
-  .zona-txt{font-size:10px;color:var(--muted);display:block;margin-top:1px;}
-  .tel a{color:var(--text);text-decoration:none;font-size:11px;}
-  .tel a:hover{color:var(--accent);}
-  .o-pill{display:inline-block;padding:1px 6px;border-radius:12px;font-size:10px;font-weight:600;white-space:nowrap;}
-  .o-late{background:var(--green-l);color:var(--green);}
-  .o-mid{background:var(--yellow-l);color:var(--yellow);}
-  .o-early{background:var(--red-l);color:var(--red);}
-  .o-unk{background:var(--border);color:var(--muted);}
-  .tipo-tag{display:inline-block;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:500;background:var(--accent-l);color:var(--accent);}
-  .empty{text-align:center;padding:32px;color:var(--muted);}
-  @media(max-width:700px){#main-panels{flex-direction:column;}.hm{display:none;}}
+  html,body{min-height:100%;}
+  body{display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.45;}
+  header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--surface);border-bottom:2px solid var(--border);}
+  header h1{font-size:16px;font-weight:700;color:var(--accent);}
+  .theme-btn{margin-left:auto;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer;font-size:11px;}
+  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;}
+  .intro{text-align:center;margin-bottom:28px;max-width:520px;}
+  .intro h2{font-size:24px;font-weight:700;margin-bottom:6px;}
+  .intro p{color:var(--muted);}
+  .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;width:100%;max-width:560px;}
+  .choice{display:flex;flex-direction:column;align-items:center;gap:12px;padding:28px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;text-decoration:none;color:var(--text);transition:border-color .15s,box-shadow .15s,transform .15s;}
+  .choice:hover,.choice:focus-visible{border-color:var(--accent);box-shadow:0 4px 16px rgba(26,111,196,.15);transform:translateY(-2px);outline:none;}
+  .icon{width:88px;height:88px;border-radius:50%;background:var(--accent-l);display:flex;align-items:center;justify-content:center;color:var(--accent);}
+  .icon svg{width:52px;height:52px;}
+  .choice .label{font-size:17px;font-weight:700;color:var(--accent);}
+  .choice .desc{font-size:12px;color:var(--muted);text-align:center;}
+  footer{padding:10px 16px;text-align:center;font-size:11px;color:var(--muted);}
 </style>
 </head>
 <body>
-<div id="page-hdr">
-  <div class="header">
-    <div class="header-top">
-      <h1>🍼 Asili Nido Milano <span>bambinopoli.it + happychild.it</span></h1>
-      <button class="theme-btn" onclick="toggleTheme()">🌙 Tema</button>
-    </div>
-    <div class="controls">
-      <input type="search" id="q" placeholder="🔍 Nome o indirizzo…" oninput="render()">
-      <select id="fO" onchange="render()">
-        <option value="">Tutti gli orari</option>
-        <option value="1830">✅ Chiude ≥ 18:30</option>
-        <option value="1900">⭐ Chiude ≥ 19:00</option>
-        <option value="1800">Chiude ≥ 18:00</option>
-      </select>
-      <select id="fZ" onchange="render()"><option value="">Tutte le zone / CAP</option></select>
-      <select id="fT" onchange="render()">
-        <option value="">Tutti i tipi</option>
-        <option value="privato">Privato</option>
-        <option value="micronido">Micronido</option>
-        <option value="nido famiglia">Nido famiglia</option>
-        <option value="convenzionato">Convenzionato</option>
-        <option value="aziendale">Aziendale</option>
-        <option value="lingua">In lingua</option>
-      </select>
-    </div>
-  </div>
-  <div class="stats" id="stats"></div>
-</div>
+<header>
+  <h1>🍼 Asili Nido Milano</h1>
+  <button class="theme-btn" onclick="toggleTheme()">🌙 Tema</button>
+</header>
 
-<div id="main-panels">
-  <!-- LISTA PANEL -->
-  <div class="panel" id="panel-lista">
-    <div class="panel-hdr" onclick="togglePanel('panel-lista')">
-      📋 Lista <span class="ph-count" id="ph-lista-count"></span>
-      <span class="ph-toggle">▾</span>
-    </div>
-    <div class="panel-body">
-      <table><thead><tr>
-        <th onclick="sb('nome')">Nome ↕</th>
-        <th onclick="sb('ind')">Indirizzo ↕</th>
-        <th onclick="sb('cap')" class="hm">Zona / CAP ↕</th>
-        <th>Telefono</th>
-        <th onclick="sb('orario')">Orario ↕</th>
-        <th onclick="sb('tipo')" class="hm">Tipo ↕</th>
-        <th onclick="sb('email')" class="hm">Email ↕</th>
-      </tr></thead><tbody id="tbody"></tbody></table>
-      <div class="empty" id="empty" style="display:none">Nessun risultato con questi filtri.</div>
-    </div>
+<main>
+  <div class="intro">
+    <h2>Cosa vuoi fare?</h2>
+    <p>Esplora gli asili nido di Milano e provincia oppure trova quelli più comodi rispetto a casa.</p>
   </div>
-  <!-- MAPPA PANEL -->
-  <div class="panel" id="panel-mappa">
-    <div class="panel-hdr" onclick="togglePanel('panel-mappa')">
-      🗺️ Mappa <span class="ph-count" id="ph-mappa-count"></span>
-      <span class="ph-toggle">▾</span>
-    </div>
-    <div class="panel-body" style="display:flex;flex-direction:column;overflow:hidden;">
-      <div id="map" style="flex:1;min-height:240px;"></div>
-      <div style="flex-shrink:0;max-height:220px;overflow-y:auto;border-top:1px solid var(--border);padding:8px 10px;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <button onclick="openGMaps()" style="background:var(--accent);color:#fff;border:none;padding:5px 14px;font-size:.75rem;font-weight:700;border-radius:6px;cursor:pointer;">
-            🗺️ Apri <span id="gm-count">tutti i</span> nidi su Google Maps ↗
-          </button>
-        </div>
-        <div id="gm-list" style="display:grid;gap:4px;"></div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <div class="choices">
+    <a class="choice" href="/cerca">
+      <span class="icon" aria-hidden="true">
+        <!-- lente su un asilo -->
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="27" cy="27" r="19"/>
+          <line x1="41" y1="41" x2="56" y2="56" stroke-width="5"/>
+          <path d="M17 27 L27 18 L37 27"/>
+          <path d="M20 25 V36 H34 V25"/>
+          <path d="M25 36 V30 H29 V36"/>
+        </svg>
+      </span>
+      <span class="label">Cerca Asili</span>
+      <span class="desc">Lista e mappa con filtri per orario, zona e tipologia</span>
+    </a>
+
+    <a class="choice" href="/match">
+      <span class="icon" aria-hidden="true">
+        <!-- casa collegata all'asilo -->
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 30 L15 20 L26 30"/>
+          <path d="M8 27 V42 H22 V27"/>
+          <path d="M13 42 V35 H17 V42"/>
+          <path d="M38 30 L49 20 L60 30"/>
+          <path d="M42 27 V42 H56 V27"/>
+          <circle cx="49" cy="33" r="3"/>
+          <path d="M15 50 C24 58 40 58 49 50" stroke-dasharray="3 5"/>
+          <path d="M32 14 c-2-3-7-2-7 2 c0 3 4 5 7 8 c3-3 7-5 7-8 c0-4-5-5-7-2z" fill="currentColor" stroke-width="1.5"/>
+        </svg>
+      </span>
+      <span class="label">Match asilo-casa</span>
+      <span class="desc">Trova gli asili più vicini e comodi rispetto alla tua casa</span>
+    </a>
+  </div>
+</main>
+
+<footer>Dati da bambinopoli.it e happychild.it</footer>
+
 <script>
-const CZ={
-  '20100':'Milano','20121':'Centro / Brera','20122':'Duomo / Porta Venezia',
-  '20123':'Centro / S. Ambrogio','20124':'Repubblica / Centrale','20125':'Niguarda / Greco',
-  '20126':'Bicocca / Sarca','20127':'Turro / Precotto','20128':'Casoretto / Loreto',
-  '20129':'Porta Venezia / B.Aires','20131':'Casoretto / Udine','20132':'Lambrate',
-  '20133':'Città Studi','20134':'Lambrate / Casoretto','20135':'Porta Romana',
-  '20136':'Navigli / Ticinese','20137':'Corvetto / P.Romana','20138':'Rogoredo',
-  '20139':'Navigli / Romolo','20141':'Bocconi / Ripamonti','20142':'Barona',
-  '20143':'Navigli / Barona','20144':'Washington / Navigli','20145':'Sempione / Fiera',
-  '20146':'De Angeli / Lorenteggio','20147':'Bande Nere / Famagosta','20148':'QT8 / Lotto',
-  '20149':'Fiera / Wagner','20151':'Gallaratese / QT8','20152':'Baggio / Famagosta',
-  '20153':'Cascina Bellaria','20154':'Monumentale / Cenisio','20155':'Certosa',
-  '20156':'Quarto Cagnino','20158':'Isola / Maciachini','20159':'Bovisa / Niguarda',
-  '20161':'Niguarda / Bruzzano','20162':'Affori / Bruzzano',
-  '20157':'Quarto Oggiaro',
-  '20095':'Cusano Milanino (MI)',
-  '20032':'Cormano (MI)',
-  '20090':'Pieve Emanuele (MI)',
-  '20079':'Basiglio (MI)',
-  '20073':'Opera (MI)',
-  '20063':'Cernusco sul Naviglio (MI)',
-  '20020':'Arese (MI)'
-};
-const CC={
-  '20100':[45.464,9.190],'20121':[45.472,9.185],'20122':[45.463,9.198],
-  '20123':[45.461,9.178],'20124':[45.480,9.200],'20125':[45.498,9.203],
-  '20126':[45.514,9.213],'20127':[45.503,9.225],'20128':[45.494,9.222],
-  '20129':[45.472,9.210],'20131':[45.482,9.225],'20132':[45.476,9.240],
-  '20133':[45.467,9.232],'20134':[45.475,9.238],'20135':[45.450,9.201],
-  '20136':[45.450,9.180],'20137':[45.445,9.208],'20138':[45.435,9.230],
-  '20139':[45.450,9.175],'20141':[45.440,9.198],'20142':[45.445,9.168],
-  '20143':[45.448,9.165],'20144':[45.462,9.165],'20145':[45.477,9.165],
-  '20146':[45.455,9.152],'20147':[45.447,9.148],'20148':[45.468,9.148],
-  '20149':[45.470,9.158],'20151':[45.487,9.147],'20152':[45.440,9.140],
-  '20153':[45.453,9.120],'20154':[45.480,9.178],'20155':[45.492,9.170],
-  '20156':[45.450,9.135],'20158':[45.494,9.192],'20159':[45.502,9.180],
-  '20161':[45.514,9.188],'20162':[45.520,9.175],
-  '20157':[45.497,9.157],
-  '20095':[45.567,9.160],
-  '20032':[45.554,9.168],
-  '20090':[45.354,9.215],
-  '20079':[45.367,9.085],
-  '20073':[45.379,9.205],
-  '20063':[45.524,9.328],
-  '20020':[45.549,9.063]
-};
-
-const DATA=[
-  {nome:"La Giocomotiva (sede 2)",ind:"Via Ruggero Bonghi 28, 20141 Milano",tel:"02-89500893",orario:"7:30-18:30",tipo:"Privato con liste pubbliche",email:"info@lagiocomotiva.com",url:"https://www.bambinopoli.it/asilo-nido/la-giocomotiva-milano-2/"},
-  {nome:"Superbaby Happy Child",ind:"Via G.da Procida 3, 20149 Milano",tel:"02-33106266",orario:"8:00-17:00",tipo:"Privato Montessori",url:"https://www.bambinopoli.it/asilo-nido/superbaby-happy-child-milano/"},
-  {nome:"Quaqquaraquà",ind:"Via Washington 12, 20146 Milano",tel:"02-51628270",orario:"8:00-18:00",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/quaqquaraqua-milano/"},
-  {nome:"Il paese dei balocchi",ind:"Via Favretto 16, 20146 Milano",tel:"02-36504279",orario:"7:30-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-paese-dei-balocchi-milano/"},
-  {nome:"La regola d'oro",ind:"Via Murillo 46, 20149 Milano",tel:"02-48100757",orario:"7:00-13:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-regola-doro-milano/"},
-  {nome:"Pistacchio e nocciolina",ind:"Via Melchiorre Gioia 61, 20124 Milano",tel:"02-39800244",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/pistacchio-e-nocciolina-asilo-e-babyparking-milano/"},
-  {nome:"Le piccole canaglie",ind:"Via Devoto 5/A, 20133 Milano",tel:"02-89074121",orario:"8:00-18:00",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/le-piccole-canaglie-milano/"},
-  {nome:"Puntini Puntini",ind:"Viale Monza 42, 20127 Milano",tel:"02-26890875",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/puntini-puntini-milano/"},
-  {nome:"Tutti giù per Terra",ind:"Via Polidoro da Caravaggio 25, 20156 Milano",tel:"02-3087760",orario:"8:00-18:00",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/tutti-giu-per-terra-aff-baby-world-milano/"},
-  {nome:"Isolachenoncè",ind:"Via Soave 11, 20135 Milano",tel:"02-58312909",orario:"8:30-15:45",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/isolachenonce-milano/"},
-  {nome:"La corte dei bimbi",ind:"Via Ascanio Sforza 75, 20141 Milano",tel:"02-89540972",orario:"9:00-17:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-corte-dei-bimbi-milano/"},
-  {nome:"Happy Child (sede 3)",ind:"Via Noe 24, 20133 Milano",tel:"02-70630215",orario:"8:00-18:00",tipo:"Privato",email:"info@happy-child.it",url:"https://www.bambinopoli.it/asilo-nido/happy-child-milano-3/"},
-  {nome:"Happy Child (sede 2)",ind:"Via Saccardo 33, 20134 Milano",tel:"347-2220473",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/happy-child-milano-2/"},
-  {nome:"Il giardino degli elfi",ind:"Via D. Cirillo 16, 20154 Milano",tel:"02-341196",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-giardino-degli-elfi-milano/"},
-  {nome:"Happy Child (sede 1)",ind:"Via Fossati 4, 20133 Milano",tel:"02-2665767",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.fossati@happychild.it",url:"https://www.bambinopoli.it/asilo-nido/happy-child-milano/"},
-  {nome:"Bimbopolis",ind:"Via Natale Battaglia 41, 20127 Milano",tel:"02-26148790",orario:"7:30-19:00",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/bimbopolis-milano/"},
-  {nome:"Il Sicomoro",ind:"Via Rogoredo 29, 20138 Milano",tel:"02-51621626",orario:"7:00-18:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/il-sicomoro-milano/"},
-  {nome:"La Compagnia dei Birichini (sede 3)",ind:"Via Ornato 51, 20162 Milano",tel:"02-6420841",orario:"7:00-18:00",tipo:"Privato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/la-compagnia-dei-birichini-milano-3/"},
-  {nome:"La Compagnia dei Birichini Gattino",ind:"Via Sebastiano Veniero 4, 20149 Milano",tel:"02-33002803",orario:"7:00-18:00",tipo:"Privato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/la-compagnia-dei-birichini-di-gianluca-gattino-milano/"},
-  {nome:"La Compagnia dei Birichini (sede 2)",ind:"Via della Boscaiola 19/21, 20159 Milano",tel:"02-6684308",orario:"7:00-18:00",tipo:"Privato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/la-compagnia-dei-birichini-milano-2/"},
-  {nome:"La Compagnia dei Birichini (sede 1)",ind:"Via Volterra 12, 20146 Milano",tel:"02-4816738",orario:"7:00-18:00",tipo:"Privato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/la-compagnia-dei-birichini-milano/"},
-  {nome:"La Nuvola Blu",ind:"Via Suzzani 13, 20125 Milano",tel:"02-66115213",orario:"8:00-18:15",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/la-nuvola-blu-milano/"},
-  {nome:"Il nido di Lù",ind:"Via Friuli 8/a, 20135 Milano",tel:"02-5457919",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-nido-di-lu-milano/"},
-  {nome:"Piccoli amici",ind:"Viale Piave 38, 20129 Milano",tel:"02-2046108",orario:"8:00-17:30",tipo:"Privato",email:"nidopiccoliamici@gmail.com",url:"https://www.bambinopoli.it/asilo-nido/piccoli-amici-milano/"},
-  {nome:"Prato Fiorito",ind:"Via E. Paladini 5, 20133 Milano",tel:"02-36524213",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/prato-fiorito-milano/"},
-  {nome:"Il giardino di Odilia",ind:"Via Goito, 20100 Milano",tel:"339-1305239",orario:"8:00-15:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-giardino-di-odilia-milano/"},
-  {nome:"La Cicogna",ind:"Via Bellosio 15, 20138 Milano",tel:"320-4127224",orario:"7:00-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-cicogna-milano/"},
-  {nome:"La puperia",ind:"Via Pozzuoli 3, 20161 Milano",tel:"02-6480955",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-puperia-milano/"},
-  {nome:"Labambalao",ind:"Via Cornelio 5, 20100 Milano",tel:"02-460819",orario:"8:00-18:00",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/labambalao-milano/"},
-  {nome:"Bimbi di mevi",ind:"Via Brusuglio 66, 20161 Milano",tel:"02-6456483",orario:"fino alle 18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/bimbi-di-mevi-milano/"},
-  {nome:"Grillo parlante 2",ind:"Via F. Brioschi 23, 20136 Milano",tel:"02-89423339",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/grillo-parlante-2-milano/"},
-  {nome:"La Compagnia dei Birichini Ricomincio da Tre",ind:"Via Lagrange 8, 20136 Milano",tel:"02-87386595",orario:"7:00-18:00",tipo:"Privato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/la-compagnia-dei-birichini-di-ricomincio-da-tre-milano/"},
-  {nome:"Il trenino dei bimbi",ind:"Via Montecuccoli 39, 20147 Milano",tel:"02-4120575",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-trenino-dei-bimbi-milano/"},
-  {nome:"Nido del Villaggio della madre e del fanciullo",ind:"Via Goya 60, 20148 Milano",tel:"02-39215385",orario:"8:30-17:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/nido-del-villaggio-della-madre-e-del-fanciullo-milano/"},
-  {nome:"La casa delle tate",ind:"Via Briosi 12, 20133 Milano",tel:"347-4162530",orario:"8:30-18:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/la-casa-delle-tate-milano/"},
-  {nome:"Scooobydooo",ind:"Via Stefano Ussi 21, 20125 Milano",tel:"02-64109618",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/scooobydooo-milano/"},
-  {nome:"La Giocomotiva (sede 1)",ind:"Via Erasmo Boschetti 1, 20124 Milano",tel:"02-6070370",orario:"7:30-18:30",tipo:"Privato con liste pubbliche",email:"info@lagiocomotiva.com",url:"https://www.bambinopoli.it/asilo-nido/la-giocomotiva-milano/"},
-  {nome:"Barbapapà",ind:"Via Melzo 16, 20129 Milano",tel:"02-20403003",orario:"8:00-18:30",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/barbapapa-milano/"},
-  {nome:"Doremi Baby (sede 4)",ind:"Viale Coni Zugna 40, 20144 Milano",tel:"02-4691227",orario:"8:00-18:00",tipo:"Privato",email:"info@familydistrict.it",url:"https://www.bambinopoli.it/asilo-nido/doremi-baby-milano-4/"},
-  {nome:"Doremi Baby (sede 3)",ind:"Via Felice Casati 38, 20124 Milano",tel:"02-66712960",orario:"8:00-18:00",tipo:"Privato",email:"info@familydistrict.it",url:"https://www.bambinopoli.it/asilo-nido/doremi-baby-milano-3/"},
-  {nome:"Doremi Baby (sede 2)",ind:"Via Paolo Sarpi 16, 20154 Milano",tel:"02-3100513",orario:"8:00-18:00",tipo:"Privato",email:"info@familydistrict.it",url:"https://www.bambinopoli.it/asilo-nido/doremi-baby-milano-2/"},
-  {nome:"Doremi Baby (sede 1)",ind:"Via Marelli 1, 20139 Milano",tel:"02-55231222",orario:"8:00-18:00",tipo:"Privato",email:"info@familydistrict.it",url:"https://www.bambinopoli.it/asilo-nido/doremi-baby-milano/"},
-  {nome:"Piccole Orme",ind:"Via Gardone 22, 20139 Milano",tel:"02-5692987",orario:"7:30-18:30",tipo:"Privato con liste pubbliche",email:"nido@piccoleorme.it",url:"https://www.bambinopoli.it/asilo-nido/piccole-orme-milano/"},
-  {nome:"La casa del tempo felice",ind:"Via Archimede 129, 20129 Milano",tel:"02-711964",orario:"7:30-18:30",tipo:"Privato",email:"contatti@lacasadeltempofelice.it",url:"https://www.bambinopoli.it/asilo-nido/la-casa-del-tempo-felice-milano/"},
-  {nome:"Ape Bombo",ind:"Via Termopili 7, 20127 Milano",tel:"02-37050556",orario:"8:00-18:30",tipo:"In lingua",url:"https://www.bambinopoli.it/asilo-nido/ape-bombo-milano/"},
-  {nome:"Harbour Club",ind:"Via Cascina Bellaria 19, 20153 Milano",tel:"02-452861",orario:"—",tipo:"Privato",email:"info@harbourclub.it",url:"https://www.bambinopoli.it/asilo-nido/harbour-club-milano/"},
-  {nome:"Grillo Parlante 1",ind:"Via F. Chopin 20, 20141 Milano",tel:"02-57401357",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/grillo-parlante-1-milano/"},
-  {nome:"Babilandia 2",ind:"Via Cassinis 61, 20139 Milano",tel:"02-531068",orario:"7:45-18:30",tipo:"Privato",email:"nido.cassinis@babilandia.it",url:"https://www.bambinopoli.it/asilo-nido/babilandia-2-affiliato-babyworld-milano/"},
-  {nome:"Babilandia 1",ind:"Via Del Turchino 6, 20137 Milano",tel:"02-59903264",orario:"7:45-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/babilandia-1-affiliato-babyworld-milano/"},
-  {nome:"Tanti baci",ind:"Via degli Imbriani 10, 20142 Milano",tel:"02-39311405",orario:"8:00-18:00",tipo:"Privato convenzionato",url:"https://www.bambinopoli.it/asilo-nido/tanti-baci-milano/"},
-  {nome:"BabyWorld di Simona Minissi",ind:"Via Martiri Triestini 1, 20148 Milano",tel:"02-48712376",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/babyworld-di-simona-minissi-milano/"},
-  {nome:"Nido Bilingue Enjoy English",ind:"Via Aristotele 23, 20128 Milano",tel:"02-26005356",orario:"7:30-18:30",tipo:"In lingua",email:"asilonido_bilingue@inwind.it",url:"https://www.bambinopoli.it/asilo-nido/nido-bilingue-enjoy-english-milano/"},
-  {nome:"La carica dei 101",ind:"Via Stefini 2, 20125 Milano",tel:"02-67391287",orario:"7:45-18:15",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-carica-dei-101-affiliato-babyworld-milano/"},
-  {nome:"Giochiamo insieme",ind:"Via Caracciolo 26, 20155 Milano",tel:"02-34537994",orario:"7:00-17:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/giochiamo-insieme-milano/"},
-  {nome:"Baloo",ind:"Via Elba 14/2, 20144 Milano",tel:"02-4816625",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/baloo-affiliato-babyworld-milano/"},
-  {nome:"Asilo di Gaia",ind:"Via Natale Battaglia 38, 20127 Milano",tel:"02-26142050",orario:"7:00-18:00",tipo:"Privato",email:"silvia.foroni@gaianido.it",url:"https://www.bambinopoli.it/asilo-nido/asilo-di-gaia-sas-milano/"},
-  {nome:"Happy Boys Club",ind:"Via G. Duprè 8, 20155 Milano",tel:"02-324131",orario:"7:50-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/happy-boys-club-milano/"},
-  {nome:"Uno due tre",ind:"Via P. Giovio 6, 20144 Milano",tel:"02-4981542",orario:"8:30-16:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/uno-due-tre-milano/"},
-  {nome:"La casetta di Anna",ind:"Via Vergato 13, 20161 Milano",tel:"335-6942856",orario:"7:45-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-casetta-di-anna-associazione-culturale-milano/"},
-  {nome:"A proposito di bimbi",ind:"Via G.B. Moroni 4, 20146 Milano",tel:"02-4039248",orario:"7:30-18:30",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/a-proposito-di-bimbi-milano/"},
-  {nome:"Tenerezza",ind:"Via Macedonio Melloni 75, 20129 Milano",tel:"02-70003661",orario:"7:30-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/tenerezza-snc-milano/"},
-  {nome:"Familosophy Sempione",ind:"Corso Sempione 60, 20154 Milano",tel:"02-36551957",orario:"7:45-18:00",tipo:"Privato",email:"segreteria@familosophy.it",url:"https://www.bambinopoli.it/asilo-nido/familosophy-sempione-milano/"},
-  {nome:"Bambini e Bambine",ind:"Via Sommacampagna 9, 20158 Milano",tel:"02-6886185",orario:"8:30-16:30",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/bambini-e-bambine-milano/"},
-  {nome:"Il sorriso",ind:"Via Pier Luigi Da Palestrina 32, 20124 Milano",tel:"02-66980682",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/ll-sorriso-milano/"},
-  {nome:"San Martino in Greco",ind:"Piazza Greco 11, 20125 Milano",tel:"02-6705846",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/san-martino-in-greco-milano/"},
-  {nome:"La Compagnia dei Birichini de Que Se Sepa",ind:"Via Lorenteggio 36, 20146 Milano",tel:"02-48958424",orario:"7:30-18:30",tipo:"Privato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/la-compagnia-dei-birichini-di-que-se-sepa-snc-milano/"},
-  {nome:"Il nido di be.be.",ind:"Viale Brenta 11, 20139 Milano",tel:"02-56816667",orario:"fino alle 18:00",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/il-nido-di-be-be-milano/"},
-  {nome:"Arcoiris (sede 2)",ind:"Viale Lombardia 65, 20131 Milano",tel:"02-28040490",orario:"—",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/arcoiris-srl-milano-2/"},
-  {nome:"Arcoiris (sede 1)",ind:"Via Briosi 12, 20133 Milano",tel:"02-70005584",orario:"—",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/arcoiris-srl-milano/"},
-  {nome:"Abracadabra",ind:"Via Piranesi 39/A, 20137 Milano",tel:"02-70105380",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/abracadabra-milano/"},
-  {nome:"Primavera Giardino d'infanzia",ind:"Via Ariberto 5, 20123 Milano",tel:"02-8358651",orario:"—",tipo:"Privato",email:"segreteria@primaveragiardinodinfanzia.it",url:"https://www.bambinopoli.it/asilo-nido/primavera-giardino-dinfanzia-milano/"},
-  {nome:"Seconda Stella a destra",ind:"Via Monterotondo 9, 20162 Milano",tel:"02-66103849",orario:"—",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/seconda-stella-a-destra-milano/"},
-  {nome:"Cuccioli Felici",ind:"Corso Italia 16, 20123 Milano",tel:"02-86465168",orario:"8:00-16:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/cuccioli-felici-milano/"},
-  {nome:"Il balzo bausette bambini",ind:"Via Soderini 21, 20146 Milano",tel:"02-472696",orario:"8:00-16:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-balzo-bausette-bambini-milano/"},
-  {nome:"Follador nursery school",ind:"Largo Quinto Alpini 6, 20145 Milano",tel:"02-43982223",orario:"8:00-17:00",tipo:"In lingua inglese",email:"follador.nurseryschool@virgilio.it",url:"https://www.bambinopoli.it/asilo-nido/follador-neursery-school-milano/"},
-  {nome:"Isola dell'infanzia",ind:"Via Lario 16, 20159 Milano",tel:"02-69003066",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/isola-dellinfanzia-milano/"},
-  {nome:"Nido Villaggio Orsenigo",ind:"Via Madre Carolina d'Orsenigo 1, 20151 Milano",tel:"02-3082340",orario:"7:30-18:00",tipo:"Convenzionato",email:"chiara.bersan@aldia.it",url:"https://www.bambinopoli.it/asilo-nido/nido-villaggio-orsenigo-milano/"},
-  {nome:"Nido Beccaro",ind:"Viale Teodorico 4/4, 20149 Milano",tel:"02-39267038",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/nido-beccaro-milano/"},
-  {nome:"Centro accoglienza ambrosiano",ind:"Via Tonezza 3, 20147 Milano",tel:"02-48703387",orario:"8:00-17:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/centro-accoglienza-ambrosiano-milano/"},
-  {nome:"L'isola che non c'è",ind:"Via Romolo Gessi 13, 20146 Milano",tel:"02-4981466",orario:"8:00-16:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/lisola-che-non-ce-milano/"},
-  {nome:"Babilandia Tiraboschi",ind:"Via Tiraboschi 6, 20135 Milano",tel:"02-5464754",orario:"8:00-17:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/babilandia-affiliato-babyworld-milano/"},
-  {nome:"I Pulcini",ind:"Via Stradella 5, 20129 Milano",tel:"02-29401568",orario:"7:30-18:30",tipo:"Privato",email:"info@nidoipulcini.com",url:"https://www.bambinopoli.it/asilo-nido/i-pulcini-milano/"},
-  {nome:"I Piccolissimi",ind:"Via Andrea Del Sarto 32, 20129 Milano",tel:"02-715700",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/i-piccolissimi-milano/"},
-  {nome:"Crescere in musica",ind:"Via Ceradini 5, 20129 Milano",tel:"02-70102988",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/crescere-in-musica-milano/"},
-  {nome:"The Humpty Dumpty Club",ind:"Via Casoretto 8, 20131 Milano",tel:"02-26826462",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/the-humpty-dumpty-club-milano/"},
-  {nome:"Il Giardino incantato",ind:"Via Benedetto Marcello 79, 20124 Milano",tel:"02-29525245",orario:"8:00-16:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-giardino-incantato-milano/"},
-  {nome:"Il Sole",ind:"Corso Magenta 52, 20123 Milano",tel:"02-48011470",orario:"—",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-sole-milano/"},
-  {nome:"Perchèpercome",ind:"Via Carroccio 4, 20123 Milano",tel:"02-89406156",orario:"8:00-17:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/perchepercome-milano/"},
-  {nome:"Il nido di Sofia",ind:"Viale Teodorico 4/4, 20149 Milano",tel:"02-3452525",orario:"8:30-16:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-nido-di-sofia-milano/"},
-  {nome:"The bumble bee club",ind:"Via San Vito 10, 20123 Milano",tel:"02-8052282",orario:"8:00-18:30",tipo:"In lingua",url:"https://www.bambinopoli.it/asilo-nido/the-bumble-bee-club-milano/"},
-  {nome:"La Giostra nel Parco",ind:"Viale Cervantes, 20121 Milano",tel:"02-315733",orario:"8:30-17:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-giostra-nel-parco-milano/"},
-  {nome:"Giocoteca",ind:"Via Bramante 29, 20154 Milano",tel:"02-3313950",orario:"8:30-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/giocoteca-milano/"},
-  {nome:"Il Germoglio",ind:"Via Lanzone 53, 20123 Milano",tel:"02-862939",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-germoglio-milano/"},
-  {nome:"Liloom",ind:"Via Procaccini 34, 20154 Milano",tel:"02-36684216",orario:"8:00-18:30",tipo:"Privato",email:"info@liloom.it",url:"https://www.bambinopoli.it/asilo-nido/liloom-milano/"},
-  {nome:"Istituto Canossiano",ind:"Via della Chiusa 9, 20123 Milano",tel:"02-58313640",orario:"9:00-17:30",tipo:"Convenzionato",url:"https://www.bambinopoli.it/asilo-nido/scuola-paritaria-dellinfanzia-istituto-canossiano-con-sezione-primavera-milano/"},
-  {nome:"I Birbanti (sede 1)",ind:"Via L. Scrosati 8, 20142 Milano",tel:"393-8910585",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/i-birbanti-milano/"},
-  {nome:"I Birbanti 2",ind:"Via De Albertis 14, 20129 Milano",tel:"393-8910585",orario:"7:30-18:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/i-birbanti-2-milano/"},
-  {nome:"La casetta di Marzapane",ind:"Via Ripamonti 114, 20141 Milano",tel:"02-39844705",orario:"9:00-16:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-casetta-di-marzapane-milano/"},
-  {nome:"Peekaboo",ind:"Via G. Rossetti 17, 20145 Milano",tel:"—",orario:"9:00-13:15",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/peekaboo-milano/"},
-  {nome:"Nido Famiglia Naturà",ind:"Via C. Clericetti 40/a, 20133 Milano",tel:"02-91675015",orario:"8:00-18:00",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/nido-famiglia-natura-milano/"},
-  {nome:"Asilo nido chicco di grano",ind:"Via G. Carozzi 26, 20147 Milano",tel:"02-48301044",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/asilo-nido-chicco-di-grano-milano/"},
-  {nome:"Il Nano gigante",ind:"Via Pitteri 56, 20131 Milano",tel:"02-26826652",orario:"8:00-16:30",tipo:"Privato",email:"info@ilnanogigante.it",url:"https://www.bambinopoli.it/asilo-nido/il-nano-gigante-milano/"},
-  {nome:"La Culla di Elauis",ind:"Viale Umbria 9/a, 20135 Milano",tel:"335-7627604",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/la-culla-di-elauis-milano/"},
-  {nome:"Il melo di Plinio",ind:"Via Plinio 16, 20129 Milano",tel:"02-23168537",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-melo-di-plinio-milano/"},
-  {nome:"Nido Bimbingioco",ind:"Via Santa Sofia 21, 20121 Milano",tel:"02-58305203",orario:"8:00-18:00",tipo:"Aziendale",url:"https://www.bambinopoli.it/asilo-nido/nido-bimbingioco-milano/"},
-  {nome:"Giochi sulle Nuvole",ind:"Via Don Bosco 11, 20139 Milano",tel:"02-56816939",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/giochi-sulle-nuvole-milano/"},
-  {nome:"Nido Bright",ind:"Via G.B. Moroni 4, 20146 Milano",tel:"02-89754922",orario:"8:00-18:30",tipo:"Privato",email:"brightacademy@legalmail.it",url:"https://www.bambinopoli.it/asilo-nido/nido-bright-milano/"},
-  {nome:"KC School",ind:"Via Orti 18, 20122 Milano",tel:"02-36592694",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/kc-school-milano/"},
-  {nome:"Dimillecolori",ind:"Via Tolstoi 39, 20146 Milano",tel:"02-42296792",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/dimillecolori-milano/"},
-  {nome:"Nido Mitades",ind:"Via Giorgi 15, 20151 Milano",tel:"02-87075821",orario:"9:00-19:30",tipo:"Privato",email:"mitades@mitades.it",url:"https://www.bambinopoli.it/asilo-nido/nido-mitades-milano/"},
-  {nome:"Rigo Tondo",ind:"Foro Buonaparte 20, 20121 Milano",tel:"334-9166714",orario:"8:30-17:30",tipo:"Privato",email:"info@rigotondo.it",url:"https://www.bambinopoli.it/asilo-nido/rigo-tondo-milano/"},
-  {nome:"Orsetti Padani",ind:"Via Colombi 20, 20161 Milano",tel:"393-5935393",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/orsetti-padani-milano/"},
-  {nome:"Asilo Nido di Elisa Infanti",ind:"Piazzale Lotto 4, 20148 Milano",tel:"338-3784926",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/asilo-nido-di-elisa-infanti-milano/"},
-  {nome:"Paciughino",ind:"Via Sebastiano de Albertis 14, 20129 Milano",tel:"02-7382139",orario:"8:00-18:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/paciughino-milano/"},
-  {nome:"Polaris Preschool",ind:"P.zza Sicilia 7, 20144 Milano",tel:"335-6374468",orario:"8:00-18:30",tipo:"Privato",email:"info@polarispreschool.it",url:"https://www.bambinopoli.it/asilo-nido/polaris-preschool-milano/"},
-  {nome:"Il Bello dei Bimbi",ind:"Via Giovanni Pascoli 56, 20133 Milano",tel:"393-3312945",orario:"8:00-18:00",tipo:"Micronido",email:"bellodeibimbi@gmail.com",url:"https://www.bambinopoli.it/asilo-nido/il-bello-dei-bimbi-milano/"},
-  {nome:"Baby Farm",ind:"Corso San Gottardo, 20136 Milano",tel:"338-2440995",orario:"8:00-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/baby-farm-milano/"},
-  {nome:"Magicomondo",ind:"Via Elba 30, 20144 Milano",tel:"02-87381820",orario:"8:30-16:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/magicomondo-milano/"},
-  {nome:"Il fantamondo",ind:"Via Cucchiari 15, 20155 Milano",tel:"377-3234274",orario:"8:00-17:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-fantamondo-milano/"},
-  {nome:"Clorofilla",ind:"Via Cesare da Sesto 5, 20123 Milano",tel:"02-58110091",orario:"8:00-18:30",tipo:"Privato",email:"info@nidoscuolaclorofilla.it",url:"https://www.bambinopoli.it/asilo-nido/clorofilla-milano/"},
-  {nome:"Il tappeto volante",ind:"Via Laura Ciceri Visconti 2, 20137 Milano",tel:"02-5462006",orario:"7:30-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-tappeto-volante-milano/"},
-  {nome:"Bolle di Sapone",ind:"Via Gassmann 3, 20128 Milano",tel:"02-36566378",orario:"—",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/bolle-di-sapone-milano/"},
-  {nome:"Asilo Nido Accademia03",ind:"Via Felice Bisleri 19, 20148 Milano",tel:"02-36554725",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/asilo-nido-accademia03-milano/"},
-  {nome:"Camamella",ind:"Via Bertini 7, 20154 Milano",tel:"02-33600498",orario:"8:45-13:00",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/camamella-milano/"},
-  {nome:"Folletti e Fate",ind:"Via Ronchi 35, 20134 Milano",tel:"02-28510390",orario:"8:00-18:00",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/associazione-folletti-e-fate-milano/"},
-  {nome:"Stella Stellina",ind:"Via Soperga 20, 20100 Milano",tel:"02-91531200",orario:"8:30-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/stella-stellina-milano/"},
-  {nome:"Micro Nido Udine Ludum",ind:"Via Ludovico D'Aragona 10, 20132 Milano",tel:"02-56816429",orario:"7:30-18:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/micro-nido-udine-ludum-milano/"},
-  {nome:"Titta",ind:"Via Siusi 20A, 20132 Milano",tel:"347-4424070",orario:"7:30-18:30",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/titta-milano/"},
-  {nome:"Gli amici di Pooh",ind:"Via Tiziano 19, 20145 Milano",tel:"02-49636144",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/gli-amici-di-pooh-srl-milano/"},
-  {nome:"Dadà",ind:"Via Gian Giacomo Mora 22, 20123 Milano",tel:"346-6012758",orario:"8:00-19:00",tipo:"Micronido",url:"https://www.bambinopoli.it/asilo-nido/dada-milano/"},
-  {nome:"Il libro magico",ind:"Via Perini 21, 20100 Milano",tel:"347-0585794",orario:"7:30-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-libro-magico-milano/"},
-  {nome:"Piccoli Sogni 2",ind:"Via Oristano 9, 20128 Milano",tel:"02-25715071",orario:"7:30-18:30",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/asilo-nido-piccoli-sogni-2-milano/"},
-  {nome:"Perle e Pirati",ind:"Via Valparaiso 2, 20144 Milano",tel:"02-89763097",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/perle-e-pirati-milano/"},
-  {nome:"Asilo nido Dal Re",ind:"Via Marcantonio Dal Re 12, 20156 Milano",tel:"02-99291195",orario:"7:30-19:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/asilo-nido-dal-re-milano/"},
-  {nome:"Il nido di Ludum",ind:"Via Pietrasanta 14, 20141 Milano",tel:"02-56816429",orario:"8:00-18:30",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/il-nido-di-ludum-milano/"},
-  {nome:"I Discoletti (sede 3)",ind:"Via Sebastiano del Piombo 16, 20149 Milano",tel:"339-8896754",orario:"8:00-18:30",tipo:"Privato",email:"info@idiscoletti.it",url:"https://www.bambinopoli.it/asilo-nido/i-discoletti-milano-3/"},
-  {nome:"I Discoletti (sede 2)",ind:"Via Previati 11, 20149 Milano",tel:"339-8896754",orario:"8:00-18:30",tipo:"Privato",email:"info@idiscoletti.it",url:"https://www.bambinopoli.it/asilo-nido/i-discoletti-milano-2/"},
-  {nome:"I Discoletti (sede 1)",ind:"Via Marghera 15, 20149 Milano",tel:"339-8896754",orario:"8:00-18:30",tipo:"Privato",email:"info@idiscoletti.it",url:"https://www.bambinopoli.it/asilo-nido/i-discoletti-milano/"},
-  {nome:"Happy Child (sede 6)",ind:"Via Zuretti 33, 20125 Milano",tel:"340-9887271",orario:"7:30-18:00",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/happy-child-milano-6/"},
-  {nome:"Happy Child (sede 5)",ind:"Via Villamirabello 1, 20125 Milano",tel:"340-9887271",orario:"8:30-18:00",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/happy-child-milano-5/"},
-  {nome:"Happy Child (sede 4)",ind:"Via Murat, 20125 Milano",tel:"340-9887271",orario:"9:00-17:30",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/happy-child-milano-4/"},
-  {nome:"Bimbo Power",ind:"Viale Sarca 189, 20126 Milano",tel:"02-66108167",orario:"7:30-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/bimbo-power-milano/"},
-  {nome:"I cucciolosi",ind:"C.so Sempione 65, 20149 Milano",tel:"02-3458207",orario:"8:00-18:30",tipo:"Aziendale",url:"https://www.bambinopoli.it/asilo-nido/i-cucciolosi-affiliato-babyworld-milano/"},
-  {nome:"Asilo Nido Arcobaleno",ind:"Via Binda 16/a, 20143 Milano",tel:"347-7310423",orario:"7:30-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/asilo-nido-arcobaleno-milano/"},
-  {nome:"L'Aquilone",ind:"Via Bassini 40, 20133 Milano",tel:"02-2663456",orario:"8:00-18:30",tipo:"Nido famiglia",url:"https://www.bambinopoli.it/asilo-nido/laquilone-milano/"},
-  {nome:"La Mongolfiera",ind:"Via Bensi 12, 20152 Milano",tel:"02-419286",orario:"7:30-19:30",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/la-mongolfiera-milano/"},
-  {nome:"Il Pianeta dei Bambini (sede 1)",ind:"Via Bramante 29, 20154 Milano",tel:"02-36601973",orario:"7:30-18:00",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/il-pianeta-dei-bambini-milano/"},
-  {nome:"Spazio prima infanzia il Marsupio",ind:"Via L. Veratti 2, 20155 Milano",tel:"02-39273101",orario:"8:00-18:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/spazio-prima-infanzia-il-marsupio-milano/"},
-  {nome:"Nido dei Girasoli",ind:"Via Don Giovanni Verità 10, 20158 Milano",tel:"348-2267118",orario:"7:40-19:00",tipo:"Privato",url:"https://www.bambinopoli.it/asilo-nido/nido-dei-girasoli-milano/"},
-  {nome:"Asilo dei Tigli",ind:"Via Scialoia 7, 20161 Milano",tel:"02-6457739",orario:"8:00-17:00",tipo:"Privato con liste pubbliche",url:"https://www.bambinopoli.it/asilo-nido/asilo-dei-tigli-milano/"},
-  // --- Happy Child Milano città ---
-  {nome:"HC Città Studi – Giolitti",ind:"Piazza Giolitti 8, 20133 Milano",tel:"02 49437926",orario:"8:00-18:00",tipo:"Privato",email:"nido.giolitti@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-citta-studi-happy-child-giolitti/"},
-  {nome:"HC Bocconi",ind:"Via Salasco 5, 20136 Milano",tel:"02 66046218",orario:"8:00-18:00",tipo:"Privato",email:"nido.bocconi@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-bocconi-nibo-happy-child-bocconi/"},
-  {nome:"HC Fiera – Scarampo",ind:"Via Meloria 1, 20148 Milano",tel:"02 34592358",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.scarampo@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-fiera-milano-happy-child-scarampo/"},
-  {nome:"HC Città Studi – Fossati",ind:"Via Fossati 4, 20131 Milano",tel:"02 2665767",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.fossati@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-citta-studi-happy-child-fossati/"},
-  {nome:"HC Città Studi – Pacini",ind:"Via G. B. Brocchi 7a, 20134 Milano",tel:"02 70632994",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.pacini@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-citta-studi-happy-child-pacini/"},
-  {nome:"HC Repubblica – San Gioachimo",ind:"Via Fabio Filzi 1, 20124 Milano",tel:"02 66986874",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.repubblica@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-repubblica-happy-child-san-gioachimo/"},
-  {nome:"HC Lorenteggio Village",ind:"Via Val Bavona 21, 20147 Milano",tel:"02 41272265",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.lorenteggio@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-lorenteggio-happy-child-lorenteggio-village/"},
-  {nome:"HC Maciachini",ind:"Via Imbonati 63, 20159 Milano",tel:"02 92803351",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.maciachini@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-maciachini-happy-child-maciachini/"},
-  {nome:"HC Ripamonti",ind:"Via Fra' Riccardo Pampuri 2, 20141 Milano",tel:"02 56808675",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.ripamonti@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-ripamonti-happy-child-ripamonti/"},
-  {nome:"HC Certosa – Garegnano",ind:"Via Garegnano 44, 20156 Milano",tel:"02 99201970",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.garegnano@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-certosa-happy-child-garegnano/"},
-  {nome:"HC Moscova – Banca Intesa",ind:"Via della Moscova 40/1, 20121 Milano",tel:"02 29002330",orario:"8:00-18:00",tipo:"Aziendale",email:"nido.intesa.moscova@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-moscova-happy-child-banca-intesa/"},
-  {nome:"HC Affori",ind:"Via Scialoia 7, 20161 Milano",tel:"02 39312647",orario:"8:00-18:00",tipo:"Privato",email:"nido.affori@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-affori-happy-child-affori/"},
-  {nome:"HC Zara – Mirabello",ind:"Via Villa Mirabello 1, 20125 Milano",tel:"3336211421",orario:"8:00-18:00",tipo:"Privato",email:"nido.mirabello@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-zara-happy-child-mirabello/"},
-  {nome:"HC Certosa – Veratti",ind:"Via Veratti 2, 20155 Milano",tel:"02 49425942",orario:"8:00-18:00",tipo:"Privato",email:"asilonidomarsupio@gmail.com",url:"https://www.happychild.it/nidi-e-scuole/zona-certosa-happy-child-veratti/"},
-  {nome:"HC Bicocca – Reguzzoni",ind:"Via Reguzzoni 7/9, 20125 Milano",tel:"02 38236836",orario:"8:00-18:00",tipo:"Privato",email:"barsa@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-bicocca-happy-child-reguzzoni/"},
-  {nome:"HC Niguarda – Suzzani",ind:"Via Suzzani 13, 20162 Milano",tel:"3466897167",orario:"8:00-18:00",tipo:"Privato",email:"barsa@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-niguarda-happy-child-suzzani/"},
-  {nome:"HC Quarto Oggiaro – Aldini",ind:"Via Aldini 52, 20157 Milano",tel:"02 3554427",orario:"8:00-18:00",tipo:"Privato",email:"liliana.colombo@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-quarto-oggiaro-happy-child-aldini/"},
-  {nome:"HC Rubattino – Oslavia",ind:"Via Oslavia 17, 20134 Milano",tel:"3923926123",orario:"8:00-18:00",tipo:"Privato",email:"liliana.colombo@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/zona-rubattino-happy-child-oslavia/"},
-  {nome:"HC Lambrate – Pitteri",ind:"Via Pitteri 54, 20134 Milano",tel:"347 2662622",orario:"8:00-18:00",tipo:"Privato",email:"asilopitteri54@gmail.com",url:"https://www.happychild.it/nidi-e-scuole/zona-lambrate-happy-child-pitteri/"},
-  // --- Happy Child Provincia ---
-  {nome:"HC Cusano Milanino",ind:"Via Adda 13, 20095 Cusano Milanino (MI)",tel:"02 52518473",orario:"8:00-18:00",tipo:"Privato",email:"nido.cusano@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-cusano/"},
-  {nome:"HC Cormano",ind:"Via Cesare Beccaria 7, 20032 Cormano (MI)",tel:"02 64085439",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.cormano@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-cormano/"},
-  {nome:"HC Rozzano – Humanitas",ind:"Via Sardegna 5, 20090 Pieve Emanuele (MI)",tel:"02 90426170",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.rozzano@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-rozzano-zona-humanitas/"},
-  {nome:"HC Basiglio – Sporting Milano 3",ind:"Piazza Marco Polo 1, 20079 Basiglio (MI)",tel:"0290751620",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.sporting@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-basiglio-sporting-milano-3/"},
-  {nome:"HC Basiglio – Via Dante",ind:"Via Dante Alighieri 7, 20079 Basiglio (MI)",tel:"02 90750063",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.basiglio@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-basiglio-via-dante/"},
-  {nome:"HC Basiglio – Mediolanum",ind:"Via Ludovico il Moro, 20079 Basiglio (MI)",tel:"02 90492999",orario:"8:00-18:00",tipo:"Aziendale",email:"asilonido@mediolanum.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-basiglio-mediolanum/"},
-  {nome:"HC Noverasco – Opera",ind:"Via Enrico Fermi 1, 20073 Opera (MI)",tel:"02 62066051",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.noverasco@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-noverasco/"},
-  {nome:"HC Cernusco – Via Diaz",ind:"Via Diaz 7, 20063 Cernusco sul Naviglio (MI)",tel:"02 92100027",orario:"8:00-18:00",tipo:"Privato",email:"nido.scuola.cernusco@happychild.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-cernusco-via-diaz/"},
-  {nome:"HC Arese – GEIS (Via Allende)",ind:"Via Salvador Allende 2/a, 20020 Arese (MI)",tel:"02 9380493",orario:"8:00-18:00",tipo:"Privato",email:"segreteria@geiscoop.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-arese-geis/"},
-  {nome:"HC Arese – GEIS (Via Matteotti)",ind:"Via Matteotti 4, 20020 Arese (MI)",tel:"02 9380493",orario:"8:00-18:00",tipo:"Privato",email:"segreteria@geiscoop.it",url:"https://www.happychild.it/nidi-e-scuole/happy-child-arese-geis-matteottihappy-child-geis-nido/"}
-];
-
-// pre-compute CAP
-const capCnt={};
-DATA.forEach(d=>{
-  const m=d.ind.match(/\b(20\d{3})\b/);
-  d.cap=m?m[1]:'20100';
-  d.zona=CZ[d.cap]||'Milano';
-});
-
-// zona dropdown
-const fZsel=document.getElementById('fZ');
-[...new Set(DATA.map(d=>d.cap))].sort().forEach(cap=>{
-  const o=document.createElement('option');
-  o.value=cap; o.textContent=cap+' — '+(CZ[cap]||'Milano');
-  fZsel.appendChild(o);
-});
-
-// orario helpers
-function pC(s){
-  if(!s||s==='—')return null;
-  const a=[...s.matchAll(/(\d{1,2})[:\.](\d{2})/g)];
-  if(!a.length)return null;
-  const L=a[a.length-1]; return +L[1]*60+ +L[2];
-}
-function oCls(s){const c=pC(s);if(c===null)return'o-unk';if(c>=18*60+30)return'o-late';if(c>=18*60)return'o-mid';return'o-early';}
-function isL(s,m){const c=pC(s);return c!==null&&c>=m;}
-function oCol(s){const c=pC(s);if(c===null)return'#999';if(c>=18*60+30)return'#198754';if(c>=18*60)return'#b8860b';return'#dc3545';}
-
-// sort
-let sC='orario',sD=-1;
-function sb(c){
-  sD=sC===c?-sD:-1; sC=c;
-  document.querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
-  event.currentTarget.classList.add('sorted');
-  render();
-}
-
-function filtered(){
-  const q=document.getElementById('q').value.toLowerCase();
-  const fo=document.getElementById('fO').value;
-  const fz=document.getElementById('fZ').value;
-  const ft=document.getElementById('fT').value.toLowerCase();
-  return DATA.filter(d=>{
-    if(q&&!d.nome.toLowerCase().includes(q)&&!d.ind.toLowerCase().includes(q))return false;
-    if(fo==='1830'&&!isL(d.orario,18*60+30))return false;
-    if(fo==='1900'&&!isL(d.orario,19*60))return false;
-    if(fo==='1800'&&!isL(d.orario,18*60))return false;
-    if(fz&&d.cap!==fz)return false;
-    if(ft&&!d.tipo.toLowerCase().includes(ft))return false;
-    return true;
-  });
-}
-
-// LISTA render
-function render(){
-  let rows=filtered();
-  rows.sort((a,b)=>{
-    let va=a[sC]||'',vb=b[sC]||'';
-    if(sC==='orario'){va=pC(va)||0;vb=pC(vb)||0;return(va-vb)*sD;}
-    return String(va).localeCompare(String(vb),'it')*sD;
-  });
-  const n18=rows.filter(d=>isL(d.orario,18*60+30)).length;
-  document.getElementById('stats').innerHTML=`<b>${rows.length}</b> nidi su <b>${DATA.length}</b> — <b>${n18}</b> chiudono ≥ 18:30`;
-  document.getElementById('empty').style.display=rows.length?'none':'block';
-  document.getElementById('tbody').innerHTML=rows.map(d=>{
-    const b18=isL(d.orario,18*60+30)?'<span class="badge18">✅18:30+</span>':'';
-    const tel=d.tel&&d.tel!=='—'?`<a href="tel:${d.tel.replace(/\D/g,'')}">${d.tel}</a>`:(d.tel||'—');
-    const email=d.email?`<a href="mailto:${d.email}" style="color:var(--accent);font-size:10px;word-break:break-all">${d.email}</a>`:'<span style="color:var(--muted);font-size:10px">—</span>';
-    return`<tr>
-      <td class="nome"><a href="${d.url}" target="_blank">${d.nome}</a>${b18}</td>
-      <td class="ind">${d.ind}</td>
-      <td class="hm"><span class="cap-pill">${d.cap}</span><span class="zona-txt">${d.zona}</span></td>
-      <td class="tel">${tel}</td>
-      <td><span class="o-pill ${oCls(d.orario)}">${d.orario||'—'}</span></td>
-      <td class="hm"><span class="tipo-tag">${d.tipo||'—'}</span></td>
-      <td class="hm">${email}</td>
-    </tr>`;
-  }).join('');
-  // update panel header count
-  const phc=document.getElementById('ph-lista-count');
-  if(phc) phc.textContent='('+rows.length+')';
-  // refresh mappa if visible
-  const mp=document.getElementById('panel-mappa');
-  if(mp && !mp.classList.contains('collapsed')){
-    renderGMList();
-    updateMapMarkers(rows);
-  }
-}
-
-// MAP — Google Maps
-let map=null,markers=[];
-function openGMaps(){
-  const rows=filtered();
-  const q=rows.length?'asili+nido+privati+Milano':'asili+nido+Milano';
-  window.open('https://www.google.com/maps/search/'+q+'/@45.464,9.190,13z','_blank');
-}
-
-function renderGMList(){
-  const rows=filtered();
-  const cnt=document.getElementById('gm-count');
-  if(cnt) cnt.textContent=rows.length;
-  const el=document.getElementById('gm-list');
-  if(!el) return;
-  const phm=document.getElementById('ph-mappa-count');
-  if(phm) phm.textContent='('+rows.length+')';
-  el.innerHTML=rows.map(d=>{
-    const gm='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.ind);
-    const color=oCol(d.orario);
-    return`<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surface);border-radius:6px;border:1px solid var(--border)">
-      <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></div>
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:600;font-size:.8rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.nome}</div>
-        <div style="font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.ind}</div>
-      </div>
-      <a href="${gm}" target="_blank" style="color:var(--accent);font-size:.75rem;white-space:nowrap;text-decoration:none;font-weight:700;flex-shrink:0">↗ Maps</a>
-    </div>`;
-  }).join('');
-}
-
-
-// ── MAPPA LEAFLET ────────────────────────────────────────────────────────────
-let leafMap=null,leafMarkers=[];
-
-function initMap(){
-  if(leafMap||typeof L==='undefined') return;
-  leafMap=L.map('map').setView([45.464,9.190],12);
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{
-    attribution:'Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Source: Esri, DeLorme, NAVTEQ, TomTom',
-    maxZoom:19
-  }).addTo(leafMap);
-}
-
-function updateMapMarkers(rows){
-  if(!leafMap) return;
-  leafMarkers.forEach(m=>leafMap.removeLayer(m));
-  leafMarkers=[];
-  rows.forEach((d,i)=>{
-    const coords=CC[d.cap];
-    if(!coords) return;
-    // deterministic jitter so same nursery always lands at same spot
-    const jLat=((i*7+3)%11-5)*0.00035;
-    const jLng=((i*11+7)%13-6)*0.00035;
-    const color=oCol(d.orario);
-    const icon=L.divIcon({
-      className:'',
-      html:`<div style="width:10px;height:10px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.5);"></div>`,
-      iconSize:[10,10],iconAnchor:[5,5]
-    });
-    const gm='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.ind);
-    const tel=d.tel&&d.tel!=='—'?`<div style="font-size:11px;color:var(--muted)">📞 <a href="tel:${d.tel.replace(/\D/g,'')}" style="color:var(--accent)">${d.tel}</a></div>`:'';
-    const emailP=d.email?`<div style="font-size:11px;color:var(--muted);margin-top:2px">✉️ <a href="mailto:${d.email}" style="color:var(--accent)">${d.email}</a></div>`:'';
-    const popup=`<div style="min-width:180px">
-      <div style="font-weight:700;font-size:13px;margin-bottom:3px">${d.nome}</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:5px">${d.ind}</div>
-      <span class="o-pill ${oCls(d.orario)}" style="margin-bottom:5px;display:inline-block">${d.orario||'—'}</span>
-      ${tel}${emailP}
-      <div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">
-        <a href="${gm}" target="_blank" style="background:var(--accent);color:#fff;text-decoration:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700">↗ Google Maps</a>
-        <a href="${d.url}" target="_blank" style="border:1px solid var(--border);color:var(--text);text-decoration:none;padding:4px 10px;border-radius:5px;font-size:11px">Scheda</a>
-      </div>
-    </div>`;
-    const m=L.marker([coords[0]+jLat,coords[1]+jLng],{icon}).bindPopup(popup);
-    m.addTo(leafMap);
-    leafMarkers.push(m);
-  });
-}
-
-// panel collapse/expand
-function togglePanel(id){
-  const p=document.getElementById(id);
-  p.classList.toggle('collapsed');
-  if(id==='panel-mappa' && !p.classList.contains('collapsed')){
-    renderGMList();
-    setTimeout(()=>{
-      initMap();
-      if(leafMap) leafMap.invalidateSize();
-      updateMapMarkers(filtered());
-    },50);
-  }
-}
-
 function toggleTheme(){
   const r=document.documentElement;
   r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';
 }
-
-render();
-// init map after DOM is ready (both panels visible by default)
-setTimeout(()=>{
-  initMap();
-  if(leafMap){
-    leafMap.invalidateSize();
-    updateMapMarkers(filtered());
-  }
-},100);
 </script>
 </body>
 </html>
-

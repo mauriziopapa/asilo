@@ -20,6 +20,8 @@ Il server legge la porta dalla variabile `PORT` fornita da Railway ed espone `/h
 
 ## Struttura
 
-- `public/index.html` — la pagina (lista + mappa Leaflet)
+- `public/index.html` — home con i pulsanti "Cerca Asili" e "Match asilo-casa"
+- `public/cerca.html` — lista + mappa Leaflet degli asili (`/cerca`)
+- `public/match.html` — pagina Match asilo-casa (`/match`)
 - `server.js` — server statico Node senza dipendenze
 - `railway.json` — configurazione di deploy Railway
