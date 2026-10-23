@@ -20,7 +20,14 @@ Il server legge la porta dalla variabile `PORT` fornita da Railway ed espone `/h
 
 ### Dati della pagina Match asilo-casa
 
-La pagina `/match` è in sola lettura e carica asili e case da `public/data.json`. Per aggiornare i dati modifica quel file e fai push su `main`: Railway ridistribuisce in automatico.
+La pagina `/match` mostra asili e case da `public/data.json` (per aggiornarli modifica il file e fai push su `main`).
+
+Gli **appuntamenti** (data, ora, note) si aggiungono e rimuovono dalla pagina e il server li salva in `data.json` dentro `DATA_DIR`. A ogni avvio il server riprende asili e case dal repository e conserva gli appuntamenti già salvati.
+
+Il disco di Railway si azzera a ogni deploy, quindi per non perdere gli appuntamenti serve un Volume:
+
+1. Nel servizio su Railway: **Settings → Volumes → Add Volume**, mount path `/data`.
+2. In **Variables** aggiungi `DATA_DIR=/data`.
 
 ## Struttura
 
@@ -28,5 +35,5 @@ La pagina `/match` è in sola lettura e carica asili e case da `public/data.json
 - `public/cerca.html` — lista + mappa Leaflet degli asili (`/cerca`)
 - `public/match.html` — pagina Match asilo-casa: asili, case e riepilogo costi (`/match`)
 - `public/data.json` — dati di asili e case mostrati in `/match`
-- `server.js` — server statico Node senza dipendenze
+- `server.js` — server Node senza dipendenze: file statici, `/data.json` e API `/api/appuntamenti`
 - `railway.json` — configurazione di deploy Railway

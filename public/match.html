@@ -728,6 +728,42 @@ body::before {
 }
 .btn-save:hover { background: var(--accent-dark); }
 
+/* ── APPUNTAMENTI ── */
+.card-actions.app-actions { flex-wrap: wrap; }
+.app-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.app-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 10px;
+  background: var(--accent-soft);
+  border-radius: 8px;
+  font-size: 12px;
+}
+.app-item.past { background: var(--surface-2); color: var(--fg-muted); }
+.app-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.app-when { font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+.app-item.past .app-when { color: var(--fg-muted); }
+.app-note { color: var(--fg-muted); line-height: 1.45; white-space: pre-line; overflow-wrap: anywhere; }
+.app-del {
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  background: none;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--fg-muted);
+}
+.app-del:hover { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+.app-table th { text-align: left; }
+.app-table td.td-note { color: var(--fg-muted); white-space: pre-line; min-width: 160px; }
+.app-table tr.past td { color: var(--fg-muted); }
+.app-table tr.past .td-when { text-decoration: line-through; }
+.td-when { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.app-empty { font-size: 12px; color: var(--fg-muted); font-style: italic; padding: 8px 0 20px; }
+.app-section { margin-bottom: 28px; }
+
 /* ── TOAST ── */
 .toast {
   position: fixed;
@@ -766,6 +802,9 @@ body::before {
     </button>
     <button class="tab-btn" data-tab="recap">
       📊 Riepilogo
+    </button>
+    <button class="tab-btn" data-tab="app">
+      📅 Appuntamenti <span class="badge" id="badge-app">0</span>
     </button>
   </nav>
 </header>
@@ -816,6 +855,11 @@ body::before {
     <div class="welfare-stats" id="welfare-stats"></div>
   </div>
   <div id="recap-root"><div class="spinner"></div></div>
+</div>
+
+<!-- ── TAB APPUNTAMENTI ── -->
+<div class="tab-panel" id="panel-app">
+  <div id="app-root"><div class="spinner"></div></div>
 </div>
 
 <!-- ── MODAL ASILO ── -->
@@ -902,6 +946,30 @@ body::before {
 </div>
 
 <!-- ── TOAST ── -->
+<!-- ── MODAL APPUNTAMENTO ── -->
+<div class="modal-bg" id="m-app" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <h2 class="modal-title" id="m-app-ttl">Nuovo appuntamento</h2>
+    <input type="hidden" id="p-tipo">
+    <input type="hidden" id="p-ref">
+    <div class="form-grid">
+      <label class="fg-label"><span>Data *</span>
+        <input class="f-input" id="p-data" type="date">
+      </label>
+      <label class="fg-label"><span>Ora *</span>
+        <input class="f-input" id="p-ora" type="time">
+      </label>
+      <label class="fg-label full"><span>Note</span>
+        <textarea class="f-area" id="p-note" placeholder="Con chi, cosa chiedere, documenti da portare…"></textarea>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="p-cancel">Annulla</button>
+      <button class="btn-save" id="p-save">Salva</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -910,6 +978,7 @@ body::before {
 /* ────────────────────────────────────────────── STATE */
 let asili = [];
 let case_ = [];
+let appuntamenti = [];
 
 /* welfare — persisted in localStorage */
 let welfareAnnuo = 0;
@@ -934,6 +1003,7 @@ try { welfareAnnuo = parseInt(localStorage.getItem('welfare_annuo') || '0', 10) 
     const data = await res.json();
     asili = (data.asili || []).slice().sort((a, b) => (a.ts||0) - (b.ts||0));
     case_ = (data.case  || []).slice().sort((a, b) => (a.ts||0) - (b.ts||0));
+    appuntamenti = data.appuntamenti || [];
   } catch(err) {
     showDataError(err.message); return;
   }
@@ -945,7 +1015,7 @@ try { welfareAnnuo = parseInt(localStorage.getItem('welfare_annuo') || '0', 10) 
     const el = document.getElementById(id);
     if (el) el.hidden = true;
   });
-  renderAsili(); renderCase(); syncAsiloSelects();
+  renderAsili(); renderCase(); syncAsiloSelects(); renderAppuntamenti();
 })();
 
 function showDataError(msg) {
@@ -1041,7 +1111,8 @@ function renderAsili() {
         </div>` : ''}
       </div>
       ${a.link ? renderLinks(a.link) : ''}
-      ${a.note ? `<div class="card-note">${x(a.note)}</div>` : ''}`;
+      ${a.note ? `<div class="card-note">${x(a.note)}</div>` : ''}
+      ${renderCardApps('asilo', a.id)}`;
   });
 }
 
@@ -1094,7 +1165,8 @@ function renderCase() {
         </div>
       </div>
       ${c.link ? renderLinks(c.link) : ''}
-      ${c.note ? `<div class="card-note">${x(c.note)}</div>` : ''}`;
+      ${c.note ? `<div class="card-note">${x(c.note)}</div>` : ''}
+      ${renderCardApps('casa', c.id)}`;
   });
 }
 
@@ -1250,8 +1322,135 @@ function renderLinks(linkStr) {
   ).join('');
 }
 
+/* ────────────────────────────────────────────── APPUNTAMENTI */
+function appKey(a) { return a.data + 'T' + (a.ora || '00:00'); }
+function isPast(a) { return new Date(appKey(a)) < new Date(); }
+function appsFor(tipo, id) {
+  return appuntamenti.filter(a => a.tipo === tipo && a.ref_id === id)
+    .sort((p, q) => appKey(p).localeCompare(appKey(q)));
+}
+function fmtDate(d) {
+  const [y, m, g] = (d || '').split('-').map(Number);
+  if (!y) return d || '—';
+  return new Date(y, m - 1, g).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderCardApps(tipo, id) {
+  const list = appsFor(tipo, id);
+  return `<div class="card-actions app-actions">
+      <button class="btn-sm" data-act="add-app" data-tipo="${tipo}" data-id="${x(id)}">📅 Aggiungi appuntamento</button>
+    </div>
+    ${list.length ? `<div class="app-list">${list.map(a => `
+      <div class="app-item${isPast(a) ? ' past' : ''}">
+        <div class="app-body">
+          <span class="app-when">📅 ${x(fmtDate(a.data))} · ore ${x(a.ora)}</span>
+          ${a.note ? `<span class="app-note">${x(a.note)}</span>` : ''}
+        </div>
+        <button class="app-del" data-act="del-app" data-id="${x(a.id)}" title="Rimuovi appuntamento">🗑</button>
+      </div>`).join('')}</div>` : ''}`;
+}
+
+function renderAppuntamenti() {
+  document.getElementById('badge-app').textContent = appuntamenti.length;
+  const root = document.getElementById('app-root');
+  if (!root) return;
+  const sorted = appuntamenti.slice().sort((p, q) => appKey(p).localeCompare(appKey(q)));
+  const delBtn = a => `<button class="app-del" data-act="del-app" data-id="${x(a.id)}" title="Rimuovi appuntamento">🗑</button>`;
+  const when = a => `<td class="td-when">${x(fmtDate(a.data))}</td><td class="td-when">${x(a.ora)}</td>`;
+
+  const appA = sorted.filter(a => a.tipo === 'asilo');
+  const appC = sorted.filter(a => a.tipo === 'casa');
+
+  let html = `<div class="app-section"><p class="recap-head">🏫 Appuntamenti asili</p>`;
+  html += !appA.length ? `<div class="app-empty">Nessun appuntamento. Usa "📅 Aggiungi appuntamento" sulle schede degli asili.</div>` : `
+    <div class="table-wrap"><table class="recap-table app-table">
+      <thead><tr><th>Data</th><th>Ora</th><th>Asilo</th><th>Indirizzo</th><th>Note</th><th></th></tr></thead>
+      <tbody>${appA.map(a => {
+        const as = asili.find(i => i.id === a.ref_id);
+        return `<tr class="${isPast(a) ? 'past' : ''}">${when(a)}
+          <td><div style="font-weight:600">${x(as?.nome || '(non più in elenco)')}</div>${as?.zona ? `<div class="td-asilo-name">${x(as.zona)}</div>` : ''}</td>
+          <td class="td-asilo-name">${x(as?.indirizzo || '—')}</td>
+          <td class="td-note">${x(a.note || '—')}</td>
+          <td>${delBtn(a)}</td></tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  html += `</div><div class="app-section"><p class="recap-head">🏠 Appuntamenti case</p>`;
+  html += !appC.length ? `<div class="app-empty">Nessun appuntamento. Usa "📅 Aggiungi appuntamento" sulle schede delle case.</div>` : `
+    <div class="table-wrap"><table class="recap-table app-table">
+      <thead><tr><th>Data</th><th>Ora</th><th>Casa</th><th>Asilo di riferimento</th><th>Note</th><th></th></tr></thead>
+      <tbody>${appC.map(a => {
+        const c = case_.find(i => i.id === a.ref_id);
+        const as = c && asili.find(i => i.id === c.asilo_vicino);
+        return `<tr class="${isPast(a) ? 'past' : ''}">${when(a)}
+          <td><div style="font-weight:600">${x(c?.indirizzo || '(non più in elenco)')}</div>${c?.zona ? `<div class="td-asilo-name">${x(c.zona)}</div>` : ''}${c?.link ? `<div style="margin-top:3px">${renderLinks(c.link)}</div>` : ''}</td>
+          <td class="td-asilo-name">${x(as?.nome || '—')}</td>
+          <td class="td-note">${x(a.note || '—')}</td>
+          <td>${delBtn(a)}</td></tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  html += `</div>`;
+  root.innerHTML = html;
+}
+
+function refreshAfterAppChange(list) {
+  appuntamenti = list || [];
+  renderAsili(); renderCase(); renderAppuntamenti();
+}
+
+async function apiApp(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return (await res.json()).appuntamenti;
+}
+
+function openAppModal(tipo, id) {
+  const item = tipo === 'asilo' ? asili.find(a => a.id === id) : case_.find(c => c.id === id);
+  document.getElementById('m-app-ttl').textContent = 'Appuntamento — ' + ((tipo === 'asilo' ? item?.nome : item?.indirizzo) || '');
+  sv('p-tipo', tipo); sv('p-ref', id); sv('p-data', ''); sv('p-ora', ''); sv('p-note', '');
+  document.getElementById('m-app').hidden = false;
+  setTimeout(() => document.getElementById('p-data').focus(), 40);
+}
+
+document.getElementById('p-cancel').addEventListener('click', () => closeModal('m-app'));
+document.getElementById('m-app').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('m-app'); });
+document.getElementById('p-save').addEventListener('click', async () => {
+  const data = v('p-data'), ora = v('p-ora');
+  if (!data) { document.getElementById('p-data').focus(); return; }
+  if (!ora) { document.getElementById('p-ora').focus(); return; }
+  const btn = document.getElementById('p-save');
+  btn.disabled = true;
+  try {
+    refreshAfterAppChange(await apiApp('POST', '/api/appuntamenti', { tipo: v('p-tipo'), ref_id: v('p-ref'), data, ora, note: v('p-note') }));
+    closeModal('m-app');
+    toast('Appuntamento salvato');
+  } catch (err) {
+    toast('Errore nel salvataggio, riprova');
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 /* ────────────────────────────────────────────── EVENT DELEGATION */
-/* (read-only from data.json — no write actions) */
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn) return;
+  const { act, id, tipo } = btn.dataset;
+  if (act === 'add-app') openAppModal(tipo, id);
+  if (act === 'del-app') {
+    const a = appuntamenti.find(p => p.id === id);
+    if (!a || !confirm(`Rimuovere l'appuntamento del ${fmtDate(a.data)} alle ${a.ora}?`)) return;
+    try {
+      refreshAfterAppChange(await apiApp('DELETE', '/api/appuntamenti/' + encodeURIComponent(id)));
+      toast('Appuntamento rimosso');
+    } catch (err) {
+      toast('Errore nella rimozione, riprova');
+    }
+  }
+});
 
 /* ────────────────────────────────────────────── MODAL ASILO */
 document.getElementById('btn-new-asilo').addEventListener('click', () => openAsiloModal(null));
@@ -1327,6 +1526,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (!document.getElementById('m-asilo').hidden) closeModal('m-asilo');
     if (!document.getElementById('m-casa').hidden) closeModal('m-casa');
+    if (!document.getElementById('m-app').hidden) closeModal('m-app');
   }
 });
 </script>
