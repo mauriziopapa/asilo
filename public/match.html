@@ -745,6 +745,24 @@ body::before {
 }
 .combo-filters .f-search:focus { outline: none; border-color: var(--accent); }
 .combo-count { font-size: 12px; color: var(--fg-muted); white-space: nowrap; }
+.combo-chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.combo-chip {
+  padding: 5px 11px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--fg-muted);
+  font-family: var(--font-b);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .1s, color .1s, border-color .1s;
+}
+.combo-chip:hover { border-color: var(--accent); color: var(--fg); }
+.combo-chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.recap-table th.th-sort { cursor: pointer; user-select: none; }
+.recap-table th.th-sort:hover, .recap-table th.th-sort.sorted { color: var(--accent); }
+.sort-ind { display: inline-block; min-width: 10px; margin-left: 3px; }
 .combo-none td { text-align: center; color: var(--fg-muted); font-style: italic; padding: 18px 12px; }
 
 /* ── APPUNTAMENTI ── */
@@ -1001,7 +1019,8 @@ let appuntamenti = [];
 
 /* filtri tabella combinazioni (riepilogo) */
 let comboRows = [];
-let comboFilterAsilo = '';
+let comboFilterAsili = new Set();   /* vuoto = tutti */
+let comboSort = { key: 'totEst', dir: 1 };
 let comboFilterText = '';
 
 /* welfare — persisted in localStorage */
@@ -1287,15 +1306,17 @@ function renderRecap() {
 
     comboRows = rows;
     const showWelfare = welfareAnnuo > 0;
-    if (comboFilterAsilo && !asili.some(a => a.id === comboFilterAsilo)) comboFilterAsilo = '';
+    comboFilterAsili.forEach(id => { if (!asili.some(a => a.id === id)) comboFilterAsili.delete(id); });
 
-    html += `<p class="recap-head" style="margin-top:28px">Tutte le combinazioni — ordinate per costo crescente</p>
+    html += `<p class="recap-head" style="margin-top:28px">Tutte le combinazioni</p>
     <div class="filter-bar combo-filters">
-      <span class="filter-label">🏫 Asilo:</span>
-      <select class="f-select" id="combo-asilo">
-        <option value="">Tutti gli asili</option>
-        ${asili.map(a => `<option value="${x(a.id)}"${a.id === comboFilterAsilo ? ' selected' : ''}>${x(a.nome || a.id)}</option>`).join('')}
-      </select>
+      <span class="filter-label">🏫 Asili:</span>
+      <div class="combo-chips" id="combo-chips">
+        <button class="combo-chip" data-combo-asilo="">Tutti</button>
+        ${asili.map(a => `<button class="combo-chip" data-combo-asilo="${x(a.id)}">${x(a.nome || a.id)}</button>`).join('')}
+      </div>
+    </div>
+    <div class="filter-bar combo-filters">
       <input class="f-search" id="combo-text" type="search" placeholder="🔍 Cerca in tutte le colonne…" value="${x(comboFilterText)}">
       <span class="combo-count" id="combo-count"></span>
     </div>
@@ -1307,8 +1328,8 @@ function renderRecap() {
             <th>Casa</th>
             <th>Asilo</th>
             <th class="th-r">Retta fino 18h</th>
-            <th class="th-r">Affitto (C+S)</th>
-            <th class="th-r">Costo totale</th>
+            <th class="th-r th-sort" data-sort="totCasa" title="Ordina per affitto">Affitto (C+S)<span class="sort-ind"></span></th>
+            <th class="th-r th-sort" data-sort="totEst" title="Ordina per costo totale">Costo totale<span class="sort-ind"></span></th>
             ${showWelfare ? `<th class="th-r">Solo affitto (welfare)</th><th class="th-r">Mesi retta</th>` : ''}
           </tr>
         </thead>
@@ -1343,9 +1364,18 @@ function renderComboRows() {
   const showWelfare = welfareAnnuo > 0;
   const words = comboFilterText.toLowerCase().split(/\s+/).filter(Boolean);
   const rows = comboRows.filter(r =>
-    (!comboFilterAsilo || r.a.id === comboFilterAsilo) &&
+    (!comboFilterAsili.size || comboFilterAsili.has(r.a.id)) &&
     (!words.length || (t => words.every(w => t.includes(w)))(comboSearchText(r)))
-  );
+  ).sort((p, q) => (p[comboSort.key] - q[comboSort.key]) * comboSort.dir || (p.totEst - q.totEst));
+  document.querySelectorAll('#combo-chips .combo-chip').forEach(b => {
+    const id = b.dataset.comboAsilo;
+    b.classList.toggle('on', id ? comboFilterAsili.has(id) : !comboFilterAsili.size);
+  });
+  document.querySelectorAll('.recap-table th.th-sort').forEach(th => {
+    const on = th.dataset.sort === comboSort.key;
+    th.classList.toggle('sorted', on);
+    th.querySelector('.sort-ind').textContent = on ? (comboSort.dir > 0 ? '↑' : '↓') : '↕';
+  });
   const count = document.getElementById('combo-count');
   if (count) count.textContent = rows.length === comboRows.length ? `${rows.length} combinazioni` : `${rows.length} di ${comboRows.length}`;
   if (!rows.length) {
@@ -1379,8 +1409,21 @@ function renderComboRows() {
 document.addEventListener('input', e => {
   if (e.target.id === 'combo-text') { comboFilterText = e.target.value; renderComboRows(); }
 });
-document.addEventListener('change', e => {
-  if (e.target.id === 'combo-asilo') { comboFilterAsilo = e.target.value; renderComboRows(); }
+document.addEventListener('click', e => {
+  const chip = e.target.closest('[data-combo-asilo]');
+  if (chip) {
+    const id = chip.dataset.comboAsilo;
+    if (!id) comboFilterAsili.clear();
+    else if (comboFilterAsili.has(id)) comboFilterAsili.delete(id);
+    else comboFilterAsili.add(id);
+    return renderComboRows();
+  }
+  const th = e.target.closest('th[data-sort]');
+  if (th) {
+    const key = th.dataset.sort;
+    comboSort = comboSort.key === key ? { key, dir: -comboSort.dir } : { key, dir: 1 };
+    renderComboRows();
+  }
 });
 
 /* ────────────────────────────────────────────── HELPERS */
