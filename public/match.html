@@ -904,15 +904,12 @@ body::before {
 <!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
-<script src="/db-client.js"></script>
 <script>
 'use strict';
 
 /* ────────────────────────────────────────────── STATE */
-let db    = null;
 let asili = [];
 let case_ = [];
-let unsubA = null, unsubC = null;
 
 /* welfare — persisted in localStorage */
 let welfareAnnuo = 0;
@@ -920,7 +917,6 @@ try { welfareAnnuo = parseInt(localStorage.getItem('welfare_annuo') || '0', 10) 
 
 /* ────────────────────────────────────────────── BOOT */
 (async () => {
-  /* init welfare input early */
   const wInp = document.getElementById('welfare-input');
   if (wInp) {
     if (welfareAnnuo) wInp.value = welfareAnnuo;
@@ -932,35 +928,32 @@ try { welfareAnnuo = parseInt(localStorage.getItem('welfare_annuo') || '0', 10) 
       if (document.getElementById('panel-recap').classList.contains('active')) renderRecap();
     });
   }
-
-  db = createRestDb();
-  if (!db) { showDbError(); return; }
-
-  unsubA = db.collection('asili').orderBy('ts','asc')
-    .onSnapshot(snap => {
-      asili = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      document.getElementById('badge-a').textContent = asili.length;
-      renderAsili();
-      renderCase();   /* refresh asilo names + filter options */
-      syncAsiloSelects();
-      if (document.getElementById('panel-recap').classList.contains('active')) renderRecap();
-    }, err => console.error('asili', err));
-
-  unsubC = db.collection('case').orderBy('ts','asc')
-    .onSnapshot(snap => {
-      case_ = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      document.getElementById('badge-c').textContent = case_.length;
-      renderCase();
-      if (document.getElementById('panel-recap').classList.contains('active')) renderRecap();
-    }, err => console.error('case', err));
+  try {
+    const res = await fetch('/data.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    asili = (data.asili || []).slice().sort((a, b) => (a.ts||0) - (b.ts||0));
+    case_ = (data.case  || []).slice().sort((a, b) => (a.ts||0) - (b.ts||0));
+  } catch(err) {
+    showDataError(err.message); return;
+  }
+  document.getElementById('badge-a').textContent = asili.length;
+  document.getElementById('badge-c').textContent = case_.length;
+  ['sp-a','sp-c'].forEach(id => document.getElementById(id)?.remove());
+  /* hide write controls — page is read-only from data.json */
+  ['btn-new-asilo','btn-new-casa'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.hidden = true;
+  });
+  renderAsili(); renderCase(); syncAsiloSelects();
 })();
 
-function showDbError() {
+function showDataError(msg) {
   ['sp-a','sp-c'].forEach(id => document.getElementById(id)?.remove());
-  const msg = `<div class="empty"><div class="empty-ico">🔒</div><div class="empty-txt">Database non disponibile. Riprova più tardi.</div></div>`;
-  document.getElementById('list-a').innerHTML = msg;
-  document.getElementById('list-c').innerHTML = msg;
-  document.getElementById('recap-root').innerHTML = msg;
+  const html = `<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-txt">Errore caricamento dati: ${x(msg || 'data.json non trovato')}</div></div>`;
+  document.getElementById('list-a').innerHTML = html;
+  document.getElementById('list-c').innerHTML = html;
+  document.getElementById('recap-root').innerHTML = html;
 }
 
 /* keep both asilo selects (filter + modal) in sync */
@@ -1048,11 +1041,7 @@ function renderAsili() {
         </div>` : ''}
       </div>
       ${a.link ? renderLinks(a.link) : ''}
-      ${a.note ? `<div class="card-note">${x(a.note)}</div>` : ''}
-      <div class="card-actions">
-        <button class="btn-sm" data-act="ea" data-id="${x(a.id)}">✏️ Modifica</button>
-        <button class="btn-sm del" data-act="da" data-id="${x(a.id)}">🗑 Elimina</button>
-      </div>`;
+      ${a.note ? `<div class="card-note">${x(a.note)}</div>` : ''}`;
   });
 }
 
@@ -1105,11 +1094,7 @@ function renderCase() {
         </div>
       </div>
       ${c.link ? renderLinks(c.link) : ''}
-      ${c.note ? `<div class="card-note">${x(c.note)}</div>` : ''}
-      <div class="card-actions">
-        <button class="btn-sm" data-act="ec" data-id="${x(c.id)}">✏️ Modifica</button>
-        <button class="btn-sm del" data-act="dc" data-id="${x(c.id)}">🗑 Elimina</button>
-      </div>`;
+      ${c.note ? `<div class="card-note">${x(c.note)}</div>` : ''}`;
   });
 }
 
@@ -1117,8 +1102,6 @@ function renderCase() {
 function renderRecap() {
   const root = document.getElementById('recap-root');
   if (!root) return;
-
-  const welfareMensile = welfareAnnuo / 12;
 
   if (!asili.length && !case_.length) {
     root.innerHTML = `<div class="empty">
@@ -1136,7 +1119,7 @@ function renderRecap() {
     asili.forEach(a => {
       const rEst = a.retta_estesa || a.retta_standard || 0;
       const mesiCopertura = (rEst > 0 && welfareAnnuo > 0)
-        ? (welfareAnnuo / rEst).toFixed(1)
+        ? Math.floor(welfareAnnuo / rEst)
         : null;
 
       const caseAsilo = case_
@@ -1144,8 +1127,7 @@ function renderRecap() {
         .map(c => {
           const totCasa = (c.canone||0) + (c.spese||0);
           const totEst  = totCasa + rEst;
-          const rettaDopoWelfare = welfareMensile > 0 ? Math.max(0, rEst - welfareMensile) : null;
-          const totWelfare = rettaDopoWelfare !== null ? totCasa + rettaDopoWelfare : null;
+          const totWelfare = welfareAnnuo > 0 ? totCasa : null;
           return { ...c, totCasa, totEst, totWelfare };
         })
         .sort((p, q) => p.totEst - q.totEst)
@@ -1178,8 +1160,9 @@ function renderRecap() {
               ${c.mq ? `<div class="top3-row"><span>Superficie</span><span>${c.mq} m²</span></div>` : ''}
               ${c.distanza ? `<div class="top3-row"><span>Distanza</span><span>${x(c.distanza)}</span></div>` : ''}
               <div class="top3-row total-row${hi?' hi':''}"><span>Costo totale</span><span>${f(c.totEst)}/mese</span></div>
-              ${c.totWelfare !== null ? `<div class="top3-row welfare-row"><span>Con welfare</span><span>${f(c.totWelfare)}/mese</span></div>` : ''}
-              ${mesiCopertura ? `<div class="top3-row mesi-row"><span>Welfare copre</span><span>${mesiCopertura} mesi retta</span></div>` : ''}
+              ${c.totWelfare !== null ? `<div class="top3-row welfare-row"><span>Solo affitto (welfare)</span><span>${f(c.totWelfare)}/mese</span></div>` : ''}
+              ${mesiCopertura ? `<div class="top3-row mesi-row"><span>Welfare copre retta</span><span>${mesiCopertura} mesi</span></div>` : ''}
+              ${c.link ? `<div style="padding-top:6px;border-top:1px solid var(--border);margin-top:4px">${renderLinks(c.link)}</div>` : ''}
             </div>
           </div>`;
         });
@@ -1198,9 +1181,8 @@ function renderRecap() {
         const rEst    = a.retta_estesa || a.retta_standard || 0;
         const totCasa = (c.canone||0) + (c.spese||0);
         const totEst  = totCasa + rEst;
-        const rettaDopoWelfare = welfareMensile > 0 ? Math.max(0, rEst - welfareMensile) : null;
-        const totWelfare = rettaDopoWelfare !== null ? totCasa + rettaDopoWelfare : null;
-        const mesiCop = (rEst > 0 && welfareAnnuo > 0) ? (welfareAnnuo / rEst).toFixed(1) : null;
+        const totWelfare = welfareAnnuo > 0 ? totCasa : null;
+        const mesiCop = (rEst > 0 && welfareAnnuo > 0) ? Math.floor(welfareAnnuo / rEst) : null;
         return { c, a, rEst, totCasa, totEst, totWelfare, mesiCop };
       })
       .filter(Boolean)
@@ -1219,7 +1201,7 @@ function renderRecap() {
             <th class="th-r">Retta fino 18h</th>
             <th class="th-r">Affitto (C+S)</th>
             <th class="th-r">Costo totale</th>
-            ${showWelfare ? `<th class="th-r">Con welfare</th><th class="th-r">Mesi coperti</th>` : ''}
+            ${showWelfare ? `<th class="th-r">Solo affitto (welfare)</th><th class="th-r">Mesi retta</th>` : ''}
           </tr>
         </thead>
         <tbody>`;
@@ -1232,6 +1214,7 @@ function renderRecap() {
           <div class="td-casa-addr">${x(c.indirizzo||'—')}</div>
           ${c.zona ? `<div class="td-asilo-name">${x(c.zona)}</div>` : ''}
           ${c.mq ? `<div class="td-asilo-name">${c.mq} m²${c.tipo?` · ${x(c.tipo)}`:''}</div>` : (c.tipo ? `<div class="td-asilo-name">${x(c.tipo)}</div>` : '')}
+          ${c.link ? `<div style="margin-top:3px">${renderLinks(c.link)}</div>` : ''}
         </td>
         <td>
           <div style="font-weight:600;font-size:12px">${x(a.nome||'—')}</div>
@@ -1241,7 +1224,7 @@ function renderRecap() {
         <td class="td-num">${f(rEst)}</td>
         <td class="td-num">${f(totCasa)}</td>
         <td class="td-num td-total${hi?' over':''}">${f(totEst)}</td>
-        ${showWelfare ? `<td class="td-num td-welfare">${totWelfare !== null ? f(totWelfare) : '—'}</td><td class="td-num td-mesi">${mesiCop ? mesiCop+' mesi' : '—'}</td>` : ''}
+        ${showWelfare ? `<td class="td-num td-welfare">${totWelfare !== null ? f(totWelfare) : '—'}</td><td class="td-num td-mesi">${mesiCop !== null ? mesiCop+' mesi' : '—'}</td>` : ''}
       </tr>`;
     });
 
@@ -1268,56 +1251,15 @@ function renderLinks(linkStr) {
 }
 
 /* ────────────────────────────────────────────── EVENT DELEGATION */
-document.addEventListener('click', async e => {
-  const btn = e.target.closest('[data-act]');
-  if (!btn || !db) return;
-  const { act, id } = btn.dataset;
-  if (act === 'ea') openAsiloModal(asili.find(a => a.id === id));
-  if (act === 'da') {
-    const a = asili.find(a => a.id === id);
-    if (confirm(`Eliminare "${a?.nome||id}"?`)) {
-      await db.doc('asili/'+id).delete();
-      toast('Asilo eliminato');
-    }
-  }
-  if (act === 'ec') openCasaModal(case_.find(c => c.id === id));
-  if (act === 'dc') {
-    const c = case_.find(c => c.id === id);
-    if (confirm(`Eliminare la casa a "${c?.indirizzo||id}"?`)) {
-      await db.doc('case/'+id).delete();
-      toast('Casa eliminata');
-    }
-  }
-});
+/* (read-only from data.json — no write actions) */
 
 /* ────────────────────────────────────────────── MODAL ASILO */
 document.getElementById('btn-new-asilo').addEventListener('click', () => openAsiloModal(null));
 document.getElementById('a-cancel').addEventListener('click', () => closeModal('m-asilo'));
 document.getElementById('m-asilo').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('m-asilo'); });
 
-document.getElementById('a-save').addEventListener('click', async () => {
-  const nome = v('a-nome');
-  if (!nome) { document.getElementById('a-nome').focus(); return; }
-  const data = {
-    nome,
-    zona:           v('a-zona'),
-    indirizzo:      v('a-ind'),
-    link:           v('a-link'),
-    retta_standard: n('a-std'),
-    retta_estesa:   n('a-est'),
-    note:           v('a-note'),
-  };
-  const editId = document.getElementById('a-id').value;
-  if (editId) {
-    data.ts = asili.find(a=>a.id===editId)?.ts || Date.now();
-    await db.doc('asili/'+editId).set(data);
-    toast('Asilo aggiornato');
-  } else {
-    data.ts = Date.now();
-    await db.collection('asili').add(data);
-    toast('Asilo aggiunto');
-  }
-  closeModal('m-asilo');
+document.getElementById('a-save').addEventListener('click', () => {
+  toast('Sola lettura — aggiornare data.json per modificare');
 });
 
 function openAsiloModal(a) {
@@ -1339,32 +1281,8 @@ document.getElementById('btn-new-casa').addEventListener('click', () => openCasa
 document.getElementById('c-cancel').addEventListener('click', () => closeModal('m-casa'));
 document.getElementById('m-casa').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('m-casa'); });
 
-document.getElementById('c-save').addEventListener('click', async () => {
-  const indirizzo = v('c-ind');
-  if (!indirizzo) { document.getElementById('c-ind').focus(); return; }
-  const data = {
-    indirizzo,
-    zona:         v('c-zona'),
-    asilo_vicino: document.getElementById('c-asilo-sel').value,
-    link:         v('c-link'),
-    canone:       n('c-can'),
-    spese:        n('c-sp'),
-    tipo:         v('c-tipo'),
-    mq:           n('c-mq'),
-    distanza:     v('c-dist'),
-    note:         v('c-note'),
-  };
-  const editId = document.getElementById('c-id').value;
-  if (editId) {
-    data.ts = case_.find(c=>c.id===editId)?.ts || Date.now();
-    await db.doc('case/'+editId).set(data);
-    toast('Casa aggiornata');
-  } else {
-    data.ts = Date.now();
-    await db.collection('case').add(data);
-    toast('Casa aggiunta');
-  }
-  closeModal('m-casa');
+document.getElementById('c-save').addEventListener('click', () => {
+  toast('Sola lettura — aggiornare data.json per modificare');
 });
 
 function openCasaModal(c) {
