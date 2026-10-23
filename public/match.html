@@ -728,6 +728,25 @@ body::before {
 }
 .btn-save:hover { background: var(--accent-dark); }
 
+/* ── FILTRI TABELLA COMBINAZIONI ── */
+.combo-filters { margin-bottom: 10px; }
+.combo-filters .f-search {
+  flex: 2;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-family: var(--font-b);
+  font-size: 13px;
+  color: var(--fg);
+  -webkit-appearance: none;
+  transition: border-color .15s;
+}
+.combo-filters .f-search:focus { outline: none; border-color: var(--accent); }
+.combo-count { font-size: 12px; color: var(--fg-muted); white-space: nowrap; }
+.combo-none td { text-align: center; color: var(--fg-muted); font-style: italic; padding: 18px 12px; }
+
 /* ── APPUNTAMENTI ── */
 .card-actions.app-actions { flex-wrap: wrap; }
 .app-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
@@ -979,6 +998,11 @@ body::before {
 let asili = [];
 let case_ = [];
 let appuntamenti = [];
+
+/* filtri tabella combinazioni (riepilogo) */
+let comboRows = [];
+let comboFilterAsilo = '';
+let comboFilterText = '';
 
 /* welfare — persisted in localStorage */
 let welfareAnnuo = 0;
@@ -1261,9 +1285,20 @@ function renderRecap() {
     });
     rows.sort((p, q) => p.totEst - q.totEst);
 
+    comboRows = rows;
     const showWelfare = welfareAnnuo > 0;
+    if (comboFilterAsilo && !asili.some(a => a.id === comboFilterAsilo)) comboFilterAsilo = '';
 
     html += `<p class="recap-head" style="margin-top:28px">Tutte le combinazioni — ordinate per costo crescente</p>
+    <div class="filter-bar combo-filters">
+      <span class="filter-label">🏫 Asilo:</span>
+      <select class="f-select" id="combo-asilo">
+        <option value="">Tutti gli asili</option>
+        ${asili.map(a => `<option value="${x(a.id)}"${a.id === comboFilterAsilo ? ' selected' : ''}>${x(a.nome || a.id)}</option>`).join('')}
+      </select>
+      <input class="f-search" id="combo-text" type="search" placeholder="🔍 Cerca in tutte le colonne…" value="${x(comboFilterText)}">
+      <span class="combo-count" id="combo-count"></span>
+    </div>
     <div class="table-wrap">
       <table class="recap-table">
         <thead>
@@ -1277,11 +1312,49 @@ function renderRecap() {
             ${showWelfare ? `<th class="th-r">Solo affitto (welfare)</th><th class="th-r">Mesi retta</th>` : ''}
           </tr>
         </thead>
-        <tbody>`;
+        <tbody id="combo-tbody"></tbody></table></div>`;
+  }
 
-    rows.forEach(({ c, a, rEst, totCasa, totEst, totWelfare, mesiCop }, i) => {
+  if (!html) {
+    html = `<div class="empty">
+      <div class="empty-ico">📊</div>
+      <div class="empty-txt">Aggiungi asili e case per vedere il confronto costi.</div>
+    </div>`;
+  }
+
+  root.innerHTML = html;
+  if (document.getElementById('combo-tbody')) renderComboRows();
+}
+
+/* testo ricercabile di una riga: tutte le colonne, importi inclusi */
+function comboSearchText({ c, a, rEst, totCasa, totEst, totWelfare, mesiCop }) {
+  return [
+    c.indirizzo, c.zona, c.tipo, c.mq ? c.mq + ' m²' : '', c.distanza,
+    a.nome, a.zona,
+    f(rEst), rEst, f(totCasa), totCasa, f(totEst), totEst,
+    totWelfare !== null ? f(totWelfare) : '', totWelfare ?? '',
+    mesiCop !== null ? mesiCop + ' mesi' : '',
+  ].join(' ').toLowerCase();
+}
+
+function renderComboRows() {
+  const tbody = document.getElementById('combo-tbody');
+  if (!tbody) return;
+  const showWelfare = welfareAnnuo > 0;
+  const words = comboFilterText.toLowerCase().split(/\s+/).filter(Boolean);
+  const rows = comboRows.filter(r =>
+    (!comboFilterAsilo || r.a.id === comboFilterAsilo) &&
+    (!words.length || (t => words.every(w => t.includes(w)))(comboSearchText(r)))
+  );
+  const count = document.getElementById('combo-count');
+  if (count) count.textContent = rows.length === comboRows.length ? `${rows.length} combinazioni` : `${rows.length} di ${comboRows.length}`;
+  if (!rows.length) {
+    tbody.innerHTML = `<tr class="combo-none"><td colspan="${showWelfare ? 8 : 6}">Nessuna combinazione con questi filtri.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(({ c, a, rEst, totCasa, totEst, totWelfare, mesiCop }, i) => {
       const hi = totEst > 2200;
-      html += `<tr>
+      return `<tr>
         <td><span class="rank-num">${i+1}</span></td>
         <td>
           <div class="td-casa-addr">${x(c.indirizzo||'—')}</div>
@@ -1299,20 +1372,16 @@ function renderRecap() {
         <td class="td-num td-total${hi?' over':''}">${f(totEst)}</td>
         ${showWelfare ? `<td class="td-num td-welfare">${totWelfare !== null ? f(totWelfare) : '—'}</td><td class="td-num td-mesi">${mesiCop !== null ? mesiCop+' mesi' : '—'}</td>` : ''}
       </tr>`;
-    });
-
-    html += `</tbody></table></div>`;
-  }
-
-  if (!html) {
-    html = `<div class="empty">
-      <div class="empty-ico">📊</div>
-      <div class="empty-txt">Aggiungi asili e case per vedere il confronto costi.</div>
-    </div>`;
-  }
-
-  root.innerHTML = html;
+  }).join('');
 }
+
+/* i filtri aggiornano solo le righe, così il campo di testo non perde il focus */
+document.addEventListener('input', e => {
+  if (e.target.id === 'combo-text') { comboFilterText = e.target.value; renderComboRows(); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'combo-asilo') { comboFilterAsilo = e.target.value; renderComboRows(); }
+});
 
 /* ────────────────────────────────────────────── HELPERS */
 function asiloList(c) {
